@@ -1,12 +1,11 @@
-import { useState } from "react";
 import "./App.css";
-import TreeFlow from "./components/TreeFlow";
+import LayoutFlow from "./components/DagreAutoLayout";
 
 function App() {
   return (
-    <>
-      <TreeFlow />
-    </>
+    <div className="" style={{ height: "100vh", width: "90vw" }}>
+      <LayoutFlow />
+    </div>
   );
 }
 
