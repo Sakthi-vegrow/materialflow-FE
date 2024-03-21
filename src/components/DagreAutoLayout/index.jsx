@@ -10,7 +10,7 @@ import dagre from "dagre";
 import "reactflow/dist/style.css";
 import { initialEdges, initialNodes } from "../../constants";
 
-const dagreGraph = new dagre?.graphlib?.Graph();
+const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 const nodeWidth = 172;
