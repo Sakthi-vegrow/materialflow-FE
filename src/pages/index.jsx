@@ -1,4 +1,4 @@
-import LayoutFlow from ".../components/DagreAutoLayout";
+import LayoutFlow from "../components/DagreAutoLayout";
 import HomeInput from "../components/HomeInput";
 
 export const Home = () => {
