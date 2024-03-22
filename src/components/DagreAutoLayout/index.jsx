@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactFlow, {
-  addEdge,
   ConnectionLineType,
   Panel,
   useNodesState,
@@ -76,10 +75,13 @@ const LayoutFlow = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesData);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesData);
 
-  const nodeTypes = {
-    PurchaseOrder: PurchaseOrderNode,
-    PurchaseItem: PurchaseOrderNode,
-  };
+  const nodeTypes = useMemo(
+    () => ({
+      PurchaseOrder: PurchaseOrderNode,
+      PurchaseItem: PurchaseOrderNode,
+    }),
+    []
+  );
 
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
@@ -109,17 +111,6 @@ const LayoutFlow = ({
     // setViewport(viewPort);
     return () => {};
   }, [viewPort]);
-
-  const onConnect = useCallback(
-    (params) =>
-      setEdges((eds) =>
-        addEdge(
-          { ...params, type: ConnectionLineType.SmoothStep, animated: true },
-          eds
-        )
-      ),
-    []
-  );
 
   return (
     <div style={{ height: "90vh", width: "90vw", overflow: "scroll" }}>
