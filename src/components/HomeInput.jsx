@@ -38,7 +38,7 @@ function HomeInput() {
     if (formData.entity == "" || formData.id == "") {
       setEmptyAlert(true);
     } else {
-      navigate(`/graph?entity=${formData.entity}&id=${formData.id}`);
+      navigate(`/graph/${formData.entity}/${formData.id}`);
     }
   };
 
