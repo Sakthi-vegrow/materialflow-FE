@@ -20,6 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { clamp } from "reactflow";
+import { entities } from "../constants/files/entities";
 
 function HomeInput() {
   const navigate = useNavigate();
@@ -41,14 +42,6 @@ function HomeInput() {
       navigate(`/graph/${formData.entity}/${formData.id}`);
     }
   };
-
-  const entities = [
-    "PurchaseOrder",
-    "PurchaseItem",
-    "Lot",
-    "SaleOrderItem",
-    "Regrading",
-  ];
 
   const [emptyAlert, setEmptyAlert] = React.useState(false);
 
@@ -131,7 +124,7 @@ function HomeInput() {
                     },
                   }}
                 >
-                  {entities.map((entity, index) => (
+                  {Object.keys(entities).map((entity, index) => (
                     <MenuItem key={index} value={entity}>
                       {entity}
                     </MenuItem>

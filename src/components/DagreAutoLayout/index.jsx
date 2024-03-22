@@ -75,10 +75,14 @@ const LayoutFlow = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesData);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesData);
 
-  const nodeTypes = {
-    PurchaseOrder: Node,
-    PurchaseItem: Node,
-  };
+  const nodeTypes = useMemo(
+    () => ({
+      PurchaseOrder: Node,
+      PurchaseItem: Node,
+      Shipment: Node,
+    }),
+    []
+  );
 
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
