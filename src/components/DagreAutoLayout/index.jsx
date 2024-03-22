@@ -24,8 +24,8 @@ const Layout = {
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 172;
-const nodeHeight = 36;
+const nodeWidth = 400;
+const nodeHeight = 400;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
@@ -128,7 +128,7 @@ const LayoutFlow = ({
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
+        nodesConnectable={false}
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
         panOnScroll
