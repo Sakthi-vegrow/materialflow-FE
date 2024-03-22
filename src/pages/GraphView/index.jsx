@@ -22,7 +22,6 @@ export const GraphView = () => {
   });
 
   useEffect(() => {
-    console.log(id, entity);
     setEntityDetails({
       id,
       entity,
@@ -49,8 +48,6 @@ export const GraphView = () => {
         }
       )
       .then(({ data }) => {
-        console.log(data, "--");
-        console.log(transformToNodesAndEdges(data));
         setGraphData(transformToNodesAndEdges(data));
         setLoading(false);
       })

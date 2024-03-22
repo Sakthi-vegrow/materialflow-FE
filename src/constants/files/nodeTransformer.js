@@ -7,10 +7,11 @@ export const transformToNodesAndEdges = (data) => {
       id: node.node_id,
       data: {
         label: node.node_id,
+        ...node,
       },
       position: { x: 0, y: 0 },
       depth,
-      ...node,
+      type: node.node_id.split("-")?.[0] || "PurchaseOrder",
     };
 
     if (parentId) {

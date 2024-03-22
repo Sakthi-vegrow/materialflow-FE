@@ -12,6 +12,7 @@ import ReactFlow, {
 import dagre from "dagre";
 import "reactflow/dist/style.css";
 import { Button, ButtonGroup, Stack, Switch } from "@mui/material";
+import { PurchaseOrderNode } from "../Nodes/PurchaseOrderNode";
 
 const label = { inputProps: { "aria-label": "Clear Old Nodes" } };
 
@@ -75,7 +76,10 @@ const LayoutFlow = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesData);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesData);
 
-  // const nodeTypes = { textUpdater: PurchaseOrderNode };
+  const nodeTypes = {
+    PurchaseOrder: PurchaseOrderNode,
+    PurchaseItem: PurchaseOrderNode,
+  };
 
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
@@ -84,7 +88,6 @@ const LayoutFlow = ({
       layout
     );
 
-    console.log(layoutedNodes, "HERE");
     setNodes(layoutedNodes);
     setEdges(layoutedEdges);
 
@@ -131,6 +134,7 @@ const LayoutFlow = ({
         panOnScroll
         onNodeClick={onNodeClick}
         defaultViewport={viewPort}
+        nodeTypes={nodeTypes}
       >
         <Controls />
         <MiniMap nodeStrokeWidth={3} />
