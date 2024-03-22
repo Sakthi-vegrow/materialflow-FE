@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ReactFlow, {
   ConnectionLineType,
   Panel,
@@ -7,6 +7,10 @@ import ReactFlow, {
   useReactFlow,
   Controls,
   MiniMap,
+  getIncomers,
+  getOutgoers,
+  getConnectedEdges,
+  Background,
 } from "reactflow";
 import dagre from "dagre";
 import "reactflow/dist/style.css";
@@ -23,8 +27,8 @@ const Layout = {
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 400;
-const nodeHeight = 400;
+const nodeWidth = 172;
+const nodeHeight = 36;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
@@ -69,7 +73,7 @@ const LayoutFlow = ({
   const { fitView } = useReactFlow();
 
   const [nodesData, setNodesData] = useState([]);
-  const [layout, setLayout] = useState(Layout.HORIZONTAL);
+  const [layout, setLayout] = useState(Layout.VERTICAL);
   const [edgesData, setEdgesData] = useState([]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesData);
@@ -100,11 +104,11 @@ const LayoutFlow = ({
     };
   }, [initialNodes, initialEdges, layout]);
 
-  // useEffect(() => {
-  //   // if (!showFullGraph)
-  //   fitView();
-  //   return () => {};
-  // }, [nodes]);
+  useEffect(() => {
+    // if (!showFullGraph)
+    fitView();
+    return () => {};
+  }, [nodes]);
 
   useEffect(() => {
     // if(showFullGraph)
@@ -113,71 +117,103 @@ const LayoutFlow = ({
     return () => {};
   }, [viewPort]);
 
+  const onNodesDelete = useCallback(
+    (deleted) => {
+      setEdges(
+        deleted.reduce((acc, node) => {
+          const incomers = getIncomers(node, nodes, edges);
+          const outgoers = getOutgoers(node, nodes, edges);
+          const connectedEdges = getConnectedEdges([node], edges);
+
+          const remainingEdges = acc.filter(
+            (edge) => !connectedEdges.includes(edge)
+          );
+
+          const createdEdges = incomers.flatMap(({ id: source }) =>
+            outgoers.map(({ id: target }) => ({
+              id: `${source}->${target}`,
+              source,
+              target,
+            }))
+          );
+
+          return [...remainingEdges, ...createdEdges];
+        }, edges)
+      );
+    },
+    [nodes, edges]
+  );
+
   return (
-    <div style={{ height: "90vh", width: "90vw", overflow: "scroll" }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        nodesConnectable={false}
-        connectionLineType={ConnectionLineType.SmoothStep}
-        fitView
-        panOnScroll
-        // onNodeClick={onNodeClick}
-        defaultViewport={viewPort}
-        nodeTypes={nodeTypes}
-      >
-        <Controls />
-        <MiniMap nodeStrokeWidth={3} />
-
-        <Panel position="top-left">
-          <Stack
-            spacing={1}
-            direction="row"
-            alignContent={"center"}
-            justifyContent={"center"}
-          >
-            <ButtonGroup
-              variant="contained"
-              aria-label="Basic button group"
-              size="small"
-              sx={{ height: 20, width: 120, fontSize: 8 }}
+    <div>
+      <div style={{ height: "90vh", width: "90vw", overflow: "scroll" }}>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onNodesDelete={onNodesDelete}
+          onEdgesChange={onEdgesChange}
+          nodesConnectable={false}
+          connectionLineType={ConnectionLineType.SmoothStep}
+          fitView
+          panOnScroll
+          onNodeClick={onNodeClick}
+          defaultViewport={viewPort}
+          nodeTypes={nodeTypes}
+        >
+       
+          <Background variant="dots" gap={12} size={1} />
+          <Controls />
+          <MiniMap nodeStrokeWidth={3} />
+          <Panel position="top-left">
+            <Stack
+              spacing={1}
+              direction="row"
+              alignContent={"center"}
+              justifyContent={"center"}
             >
-              <Button
-                variant={Layout.VERTICAL === layout ? "contained" : "outlined"}
-                onClick={() => setLayout(Layout.VERTICAL)}
+              <ButtonGroup
+                variant="contained"
+                aria-label="Basic button group"
                 size="small"
-                sx={{ fontSize: 8 }}
+                sx={{ height: 20, width: 120, fontSize: 8 }}
               >
-                Vertical
-              </Button>
+                <Button
+                  variant={
+                    Layout.VERTICAL === layout ? "contained" : "outlined"
+                  }
+                  onClick={() => setLayout(Layout.VERTICAL)}
+                  size="small"
+                  sx={{ fontSize: 8 }}
+                >
+                  Vertical
+                </Button>
 
-              <Button
-                variant={
-                  Layout.HORIZONTAL === layout ? "contained" : "outlined"
-                }
-                onClick={() => setLayout(Layout.HORIZONTAL)}
-                size="small"
-                sx={{ fontSize: 8 }}
-              >
-                Horizontal
-              </Button>
-            </ButtonGroup>
-            <div>
-              <Switch
-                {...label}
-                name="Show Full Graph"
-                checked={showFullGraph}
-                size="small"
-                onChange={() => {
-                  setShowFullGraph((val) => !val);
-                }}
-              />
-              <span style={{ fontSize: 10 }}>Show Full Graph</span>
-            </div>
+                <Button
+                  variant={
+                    Layout.HORIZONTAL === layout ? "contained" : "outlined"
+                  }
+                  onClick={() => setLayout(Layout.HORIZONTAL)}
+                  size="small"
+                  sx={{ fontSize: 8 }}
+                >
+                  Horizontal
+                </Button>
+              </ButtonGroup>
+              <div>
+                <Switch
+                  {...label}
+                  name="Show Full Graph"
+                  checked={showFullGraph}
+                  size="small"
+                  onChange={() => {
+                    setShowFullGraph((val) => !val);
+                  }}
+                />
+                <span style={{ fontSize: 10 }}>Show Full Graph</span>
+              </div>
 
-            {/* <Select
+              {/* <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={level}
@@ -189,9 +225,10 @@ const LayoutFlow = ({
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
             </Select> */}
-          </Stack>
-        </Panel>
-      </ReactFlow>
+            </Stack>
+          </Panel>
+        </ReactFlow>
+      </div>
     </div>
   );
 };

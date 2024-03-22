@@ -1,7 +1,6 @@
-import React, { useState, useRouter } from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -19,13 +18,16 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import { clamp } from "reactflow";
-import { entities } from "../constants/files/entities";
+import { FormControlLabel, Switch } from "@mui/material";
 
 function HomeInput() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({ entity: "", id: "" });
+  const [formData, setFormData] = useState({
+    entity: "",
+    id: "",
+    reverse: false,
+  });
 
   const handleFormEntityInput = (e) => {
     setFormData({ ...formData, entity: e.target.value });
@@ -35,13 +37,28 @@ function HomeInput() {
     setFormData({ ...formData, id: e.target.value });
   };
 
+  const handleFormCheckInput = (e) => {
+    setFormData({ ...formData, reverse: e.target.checked });
+  };
+
   const handleSubmit = () => {
     if (formData.entity == "" || formData.id == "") {
       setEmptyAlert(true);
     } else {
-      navigate(`/graph/${formData.entity}/${formData.id}`);
+      navigate(
+        `/graph/${formData.entity}/${formData.id}?reverse=${formData.reverse}`
+      );
     }
   };
+
+  const entities = [
+    "PurchaseOrder",
+    "PurchaseItem",
+    "Lot",
+    "SaleOrderItem",
+    "Regrading",
+    "SaleOrder",
+  ];
 
   const [emptyAlert, setEmptyAlert] = React.useState(false);
 
@@ -138,6 +155,13 @@ function HomeInput() {
                   onChange={handleFormIdInput}
                 />
               </FormControlStyled>
+              <FormControlLabel
+                control={<Switch />}
+                label="Reverse"
+                value={formData.reverse}
+                onChange={handleFormCheckInput}
+              />
+
               <FormSubmitBtn variant="contained" onClick={handleSubmit}>
                 <AlignVerticalCenterIcon /> Visualize
               </FormSubmitBtn>
