@@ -36,6 +36,16 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
+const InnerTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    border: "1px solid #dadde9",
+  },
+}));
+
 export const Node = ({ data }) => {
   const [expand, setExpand] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -144,7 +154,10 @@ export const Node = ({ data }) => {
                         <span style={{ fontWeight: "bold" }}>
                           {capitalizeFirstLetter(key)}
                         </span>
-                        <Tooltip title={data?.details[key]}>
+                        <InnerTooltip
+                          sx={{ background: "white" }}
+                          title={data?.details[key]}
+                        >
                           <span
                             style={{
                               maxWidth: "150px",
@@ -156,7 +169,7 @@ export const Node = ({ data }) => {
                           >
                             {data?.details[key]}
                           </span>
-                        </Tooltip>
+                        </InnerTooltip>
                       </DataItem>
                     );
                   })}
