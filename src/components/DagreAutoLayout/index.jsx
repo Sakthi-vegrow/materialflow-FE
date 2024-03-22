@@ -16,6 +16,7 @@ import dagre from "dagre";
 import "reactflow/dist/style.css";
 import { Button, ButtonGroup, Stack, Switch } from "@mui/material";
 import { Node } from "../Nodes/Node";
+import Edge from "../Edges/Edge";
 
 const label = { inputProps: { "aria-label": "Clear Old Nodes" } };
 
@@ -88,6 +89,15 @@ const LayoutFlow = ({
     []
   );
 
+  const edgeTypes = useMemo(
+    () => ({
+      PurchaseOrder: Edge,
+      PurchaseItem: Edge,
+      Shipment: Edge,
+    }),
+    []
+  );
+
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       initialNodes,
@@ -145,49 +155,45 @@ const LayoutFlow = ({
   );
 
   return (
-    <div>
-      <div style={{ height: "90vh", width: "90vw", overflow: "scroll" }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onNodesDelete={onNodesDelete}
-          onEdgesChange={onEdgesChange}
-          nodesConnectable={false}
-          connectionLineType={ConnectionLineType.SmoothStep}
-          fitView
-          panOnScroll
-          onNodeClick={onNodeClick}
-          defaultViewport={viewPort}
-          nodeTypes={nodeTypes}
-        >
-       
-          <Background variant="dots" gap={12} size={1} />
-          <Controls />
-          <MiniMap nodeStrokeWidth={3} />
-          <Panel position="top-left">
-            <Stack
-              spacing={1}
-              direction="row"
-              alignContent={"center"}
-              justifyContent={"center"}
+    <div style={{ height: "90vh", width: "100vw", overflow: "scroll" }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodesConnectable={false}
+        connectionLineType={ConnectionLineType.SmoothStep}
+        fitView
+        panOnScroll
+        onNodeClick={onNodeClick}
+        defaultViewport={viewPort}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+      >
+        <Controls />
+        <MiniMap nodeStrokeWidth={3} />
+
+        <Panel position="top-left">
+          <Stack
+            spacing={1}
+            direction="row"
+            alignContent={"center"}
+            justifyContent={"center"}
+          >
+            <ButtonGroup
+              variant="contained"
+              aria-label="Basic button group"
+              size="small"
+              sx={{ height: 20, width: 120, fontSize: 8 }}
             >
-              <ButtonGroup
-                variant="contained"
-                aria-label="Basic button group"
+              <Button
+                variant={Layout.VERTICAL === layout ? "contained" : "outlined"}
+                onClick={() => setLayout(Layout.VERTICAL)}
                 size="small"
-                sx={{ height: 20, width: 120, fontSize: 8 }}
+                sx={{ fontSize: 8 }}
               >
-                <Button
-                  variant={
-                    Layout.VERTICAL === layout ? "contained" : "outlined"
-                  }
-                  onClick={() => setLayout(Layout.VERTICAL)}
-                  size="small"
-                  sx={{ fontSize: 8 }}
-                >
-                  Vertical
-                </Button>
+                Vertical
+              </Button>
 
                 <Button
                   variant={

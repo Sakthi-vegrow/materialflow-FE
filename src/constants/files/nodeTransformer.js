@@ -1,4 +1,6 @@
-export const transformToNodesAndEdges = (data, selectedNodes = []) => {
+import { edgeColors } from "./entities";
+
+export const transformToNodesAndEdges = (data) => {
   let nodes = [];
   let edges = [];
 
@@ -23,6 +25,9 @@ export const transformToNodesAndEdges = (data, selectedNodes = []) => {
         id: `e${parentId}-${node.node_id}`,
         source: parentId,
         target: node.node_id,
+        style: {
+          stroke: edgeColors[parentId.split("-")[0]],
+        },
       });
     }
 

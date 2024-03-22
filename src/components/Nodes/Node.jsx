@@ -40,10 +40,11 @@ export const Node = ({ data }) => {
   const [expand, setExpand] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
-  const expandHandler = () => {
+  const expandHandler = (e) => {
     setExpand((expand) => {
       return !expand;
     });
+    e.stopPropagation();
   };
 
   const handleTooltipOpen = () => {
@@ -56,57 +57,20 @@ export const Node = ({ data }) => {
   return (
     <>
       <Handle type="target" position={Position.Left} />
-
-      <HtmlTooltip
-        onOpen={handleTooltipOpen}
-        open={tooltipOpen}
-        onClose={handleTootltipClose}
-        title={Object.keys(data?.details).map((key) => {
-          return (
-            <DataItem
-              style={{ gridTemplateColumns: "1fr 1fr" }}
-              key={data?.details?.identifier}
-            >
-              <span style={{ fontWeight: "bold" }}>
-                {capitalizeFirstLetter(key)}
-              </span>
-              <span
-                style={{
-                  maxWidth: "150px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  textAlign: "right",
-                }}
+      {data.details && (
+        <HtmlTooltip
+          onOpen={handleTooltipOpen}
+          open={tooltipOpen}
+          onClose={handleTootltipClose}
+          title={Object.keys(data?.details).map((key) => {
+            return (
+              <DataItem
+                style={{ gridTemplateColumns: "1fr 1fr" }}
+                key={data?.details?.identifier}
               >
-                {data?.details[key]}
-              </span>
-            </DataItem>
-          );
-        })}
-      >
-        {" "}
-        <DataContainer style={{ backgroundColor: `${entities[data?.name]}` }}>
-          {!expand ? (
-            <DataItem style={{ textAlign: "center" }}>
-              {data?.name}
-              <br />
-              {data?.node_id?.split("-").slice(1)}
-              <br />
-              <div style={{ position: "absolute", right: 0, top: 0 }}>
-                <IconButton onClick={(e) => expandHandler()}>
-                  {expand ? (
-                    <CloseOutlinedIcon />
-                  ) : (
-                    <ArrowDropDownOutlinedIcon />
-                  )}
-                </IconButton>
-              </div>
-            </DataItem>
-          ) : (
-            <>
-              <DataItem style={{ gridTemplateColumns: "1fr 1fr" }}>
-                <span style={{ fontWeight: "bold" }}>Entity </span>
+                <span style={{ fontWeight: "bold" }}>
+                  {capitalizeFirstLetter(key)}
+                </span>
                 <span
                   style={{
                     maxWidth: "150px",
@@ -116,59 +80,98 @@ export const Node = ({ data }) => {
                     textAlign: "right",
                   }}
                 >
-                  {data?.name}
+                  {data?.details[key]}
                 </span>
-              </DataItem>{" "}
-              <DataItem style={{ gridTemplateColumns: "1fr 1fr" }}>
-                <span style={{ fontWeight: "bold" }}>ID </span>
-                <span
-                  style={{
-                    maxWidth: "150px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    textAlign: "right",
-                  }}
-                >
-                  {data?.node_id.split("-").slice(1)}
-                </span>
-              </DataItem>{" "}
-              {Object.keys(data?.details).map((key) => {
-                return (
-                  <DataItem
-                    style={{ gridTemplateColumns: "1fr 1fr" }}
-                    key={data?.details?.identifier}
+              </DataItem>
+            );
+          })}
+        >
+          {" "}
+          <DataContainer style={{ backgroundColor: `${entities[data?.name]}` }}>
+            {!expand ? (
+              <DataItem style={{ textAlign: "center" }}>
+                {data?.name}
+                <br />
+                {data?.node_id?.split("-").slice(1)}
+                <br />
+                <div style={{ position: "absolute", right: 0, top: 0 }}>
+                  <IconButton onClick={(e) => expandHandler(e)}>
+                    {expand ? (
+                      <CloseOutlinedIcon />
+                    ) : (
+                      <ArrowDropDownOutlinedIcon />
+                    )}
+                  </IconButton>
+                </div>
+              </DataItem>
+            ) : (
+              <>
+                <DataItem style={{ gridTemplateColumns: "1fr 1fr" }}>
+                  <span style={{ fontWeight: "bold" }}>Entity </span>
+                  <span
+                    style={{
+                      maxWidth: "150px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      textAlign: "right",
+                    }}
                   >
-                    <span style={{ fontWeight: "bold" }}>
-                      {capitalizeFirstLetter(key)}
-                    </span>
-                    <span
-                      style={{
-                        maxWidth: "150px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        textAlign: "right",
-                      }}
-                    >
-                      {data?.details[key]}
-                    </span>
-                  </DataItem>
-                );
-              })}
-              <div style={{ position: "absolute", right: 0, top: 0 }}>
-                <IconButton onClick={(e) => expandHandler()}>
-                  {expand ? (
-                    <CloseOutlinedIcon />
-                  ) : (
-                    <ArrowDropDownOutlinedIcon />
-                  )}
-                </IconButton>
-              </div>
-            </>
-          )}
-        </DataContainer>
-      </HtmlTooltip>
+                    {data?.name}
+                  </span>
+                </DataItem>{" "}
+                <DataItem style={{ gridTemplateColumns: "1fr 1fr" }}>
+                  <span style={{ fontWeight: "bold" }}>ID </span>
+                  <span
+                    style={{
+                      maxWidth: "150px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      textAlign: "right",
+                    }}
+                  >
+                    {data?.node_id.split("-").slice(1)}
+                  </span>
+                </DataItem>{" "}
+                {data.details &&
+                  Object.keys(data?.details).map((key) => {
+                    return (
+                      <DataItem
+                        style={{ gridTemplateColumns: "1fr 1fr" }}
+                        key={data?.details?.identifier}
+                      >
+                        <span style={{ fontWeight: "bold" }}>
+                          {capitalizeFirstLetter(key)}
+                        </span>
+                        <span
+                          style={{
+                            maxWidth: "150px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            textAlign: "right",
+                          }}
+                        >
+                          {data?.details[key]}
+                        </span>
+                      </DataItem>
+                    );
+                  })}
+                <div style={{ position: "absolute", right: 0, top: 0 }}>
+                  <IconButton onClick={(e) => expandHandler(e)}>
+                    {expand ? (
+                      <CloseOutlinedIcon />
+                    ) : (
+                      <ArrowDropDownOutlinedIcon />
+                    )}
+                  </IconButton>
+                </div>
+              </>
+            )}
+          </DataContainer>
+        </HtmlTooltip>
+      )}
       <Handle type="source" position={Position.Right} id="a" />
     </>
   );
