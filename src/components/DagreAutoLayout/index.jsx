@@ -12,7 +12,7 @@ import ReactFlow, {
 import dagre from "dagre";
 import "reactflow/dist/style.css";
 import { Button, ButtonGroup, Stack, Switch } from "@mui/material";
-// import { initialEdges, initialNodes } from "../../constants";
+
 const label = { inputProps: { "aria-label": "Clear Old Nodes" } };
 
 const Layout = {
@@ -118,19 +118,8 @@ const LayoutFlow = ({
     []
   );
 
-  // const onLayout = useCallback(() => {
-  //   const layouted = getLayoutedElements(nodes, edges);
-
-  //   setNodes([...layouted.nodes]);
-  //   setEdges([...layouted.edges]);
-
-  //   window.requestAnimationFrame(() => {
-  //     fitView();
-  //   });
-  // }, [nodes, edges]);
-
   return (
-    <div style={{ height: "100vh", width: "90vw" }}>
+    <div style={{ height: "90vh", width: "90vw", overflow: "scroll" }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}

@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/graph" element={<GraphView />} />
+        <Route path="/graph/:entity/:id" element={<GraphView />} />
       </Routes>
     </Router>
   );
