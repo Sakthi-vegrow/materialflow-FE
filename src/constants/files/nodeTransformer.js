@@ -1,6 +1,6 @@
 import { edgeColors } from "./entities";
 
-export const transformToNodesAndEdges = (data) => {
+export const transformToNodesAndEdges = (data, selectedNodes = []) => {
   let nodes = [];
   let edges = [];
 
@@ -43,53 +43,7 @@ export const transformToNodesAndEdges = (data) => {
   traverse(data, null);
 
   return {
-    nodes: [
-      ...nodes,
-      {
-        id: "PurchaseOrder",
-        data: { label: "Group A" },
-        position: { x: 100, y: 100 },
-        className: "light",
-        style: {
-          backgroundColor: "rgba(255, 0, 0, 0.2)",
-          // width: 200,
-          // height: 200,
-        },
-      },
-      {
-        id: "PurchaseItem",
-        data: { label: "Group A" },
-        position: { x: 100, y: 100 },
-        className: "light",
-        style: {
-          backgroundColor: "rgba(255, 0, 0, 0.2)",
-          // width: 200,
-          // height: 200,
-        },
-      },
-      {
-        id: "Shipment",
-        data: { label: "Group A" },
-        position: { x: 100, y: 100 },
-        className: "light",
-        style: {
-          backgroundColor: "rgba(255, 0, 0, 0.2)",
-          // width: 200,
-          // height: 200,
-        },
-      },
-      {
-        id: "PurchaseOrder",
-        data: { label: "Group A" },
-        position: { x: 100, y: 100 },
-        className: "light",
-        style: {
-          backgroundColor: "rgba(255, 0, 0, 0.2)",
-          // width: 200,
-          // height: 200,
-        },
-      },
-    ],
+    nodes,
 
     edges,
   };
