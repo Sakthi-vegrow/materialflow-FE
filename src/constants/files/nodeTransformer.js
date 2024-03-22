@@ -17,7 +17,6 @@ export const transformToNodesAndEdges = (data, selectedNodes = []) => {
       position: { x: 0, y: 0 },
       depth,
       type: entity || "PurchaseOrder",
-      parentNode: "PurchaseOrder",
     };
 
     if (parentId) {
