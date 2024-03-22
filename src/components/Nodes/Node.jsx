@@ -144,17 +144,19 @@ export const Node = ({ data }) => {
                         <span style={{ fontWeight: "bold" }}>
                           {capitalizeFirstLetter(key)}
                         </span>
-                        <span
-                          style={{
-                            maxWidth: "150px",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            textAlign: "right",
-                          }}
-                        >
-                          {data?.details[key]}
-                        </span>
+                        <Tooltip title={data?.details[key]}>
+                          <span
+                            style={{
+                              maxWidth: "150px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              textAlign: "right",
+                            }}
+                          >
+                            {data?.details[key]}
+                          </span>
+                        </Tooltip>
                       </DataItem>
                     );
                   })}

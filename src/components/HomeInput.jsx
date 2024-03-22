@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { FormControlLabel, Switch } from "@mui/material";
+import { entities } from "../constants/files/entities";
 
 function HomeInput() {
   const navigate = useNavigate();
@@ -50,15 +51,6 @@ function HomeInput() {
       );
     }
   };
-
-  const entities = [
-    "PurchaseOrder",
-    "PurchaseItem",
-    "Lot",
-    "SaleOrderItem",
-    "Regrading",
-    "SaleOrder",
-  ];
 
   const [emptyAlert, setEmptyAlert] = React.useState(false);
 

@@ -165,7 +165,7 @@ const LayoutFlow = ({
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
         panOnScroll
-        onNodeClick={onNodeClick}
+        // onNodeClick={onNodeClick}
         defaultViewport={viewPort}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
@@ -195,31 +195,31 @@ const LayoutFlow = ({
                 Vertical
               </Button>
 
-                <Button
-                  variant={
-                    Layout.HORIZONTAL === layout ? "contained" : "outlined"
-                  }
-                  onClick={() => setLayout(Layout.HORIZONTAL)}
-                  size="small"
-                  sx={{ fontSize: 8 }}
-                >
-                  Horizontal
-                </Button>
-              </ButtonGroup>
-              <div>
-                <Switch
-                  {...label}
-                  name="Show Full Graph"
-                  checked={showFullGraph}
-                  size="small"
-                  onChange={() => {
-                    setShowFullGraph((val) => !val);
-                  }}
-                />
-                <span style={{ fontSize: 10 }}>Show Full Graph</span>
-              </div>
+              <Button
+                variant={
+                  Layout.HORIZONTAL === layout ? "contained" : "outlined"
+                }
+                onClick={() => setLayout(Layout.HORIZONTAL)}
+                size="small"
+                sx={{ fontSize: 8 }}
+              >
+                Horizontal
+              </Button>
+            </ButtonGroup>
+            <div>
+              <Switch
+                {...label}
+                name="Show Full Graph"
+                checked={showFullGraph}
+                size="small"
+                onChange={() => {
+                  setShowFullGraph((val) => !val);
+                }}
+              />
+              <span style={{ fontSize: 10 }}>Show Full Graph</span>
+            </div>
 
-              {/* <Select
+            {/* <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={level}
@@ -231,10 +231,9 @@ const LayoutFlow = ({
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
             </Select> */}
-            </Stack>
-          </Panel>
-        </ReactFlow>
-      </div>
+          </Stack>
+        </Panel>
+      </ReactFlow>
     </div>
   );
 };
