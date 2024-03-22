@@ -11,7 +11,7 @@ import ReactFlow, {
 import dagre from "dagre";
 import "reactflow/dist/style.css";
 import { Button, ButtonGroup, Stack, Switch } from "@mui/material";
-import { PurchaseOrderNode } from "../Nodes/PurchaseOrderNode";
+import { Node } from "../Nodes/Node";
 
 const label = { inputProps: { "aria-label": "Clear Old Nodes" } };
 
@@ -75,13 +75,10 @@ const LayoutFlow = ({
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesData);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesData);
 
-  const nodeTypes = useMemo(
-    () => ({
-      PurchaseOrder: PurchaseOrderNode,
-      PurchaseItem: PurchaseOrderNode,
-    }),
-    []
-  );
+  const nodeTypes = {
+    PurchaseOrder: Node,
+    PurchaseItem: Node,
+  };
 
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
@@ -99,11 +96,11 @@ const LayoutFlow = ({
     };
   }, [initialNodes, initialEdges, layout]);
 
-  useEffect(() => {
-    // if (!showFullGraph)
-    fitView();
-    return () => {};
-  }, [nodes]);
+  // useEffect(() => {
+  //   // if (!showFullGraph)
+  //   fitView();
+  //   return () => {};
+  // }, [nodes]);
 
   useEffect(() => {
     // if(showFullGraph)
@@ -123,7 +120,7 @@ const LayoutFlow = ({
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
         panOnScroll
-        onNodeClick={onNodeClick}
+        // onNodeClick={onNodeClick}
         defaultViewport={viewPort}
         nodeTypes={nodeTypes}
       >
