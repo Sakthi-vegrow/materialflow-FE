@@ -2,13 +2,15 @@ export const transformToNodesAndEdges = (data) => {
   let nodes = [];
   let edges = [];
 
-  const traverse = (node, parentId) => {
+  const traverse = (node, parentId, depth = 0) => {
     let currentNode = {
       id: node.node_id,
       data: {
         label: node.node_id,
       },
       position: { x: 0, y: 0 },
+      depth,
+      ...node,
     };
 
     if (parentId) {
@@ -23,7 +25,7 @@ export const transformToNodesAndEdges = (data) => {
 
     if (node.children && node.children.length > 0) {
       node.children.forEach((child) => {
-        traverse(child, node.node_id);
+        traverse(child, node.node_id, depth + 1);
       });
     }
   };
