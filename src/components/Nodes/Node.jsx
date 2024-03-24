@@ -1,11 +1,12 @@
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
 import styled from "styled-components";
 import { entities } from "../../constants/files/entities";
 import { Button, IconButton } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
+import "./Node.css";
 
 const handleStyle = { left: 10 };
 
@@ -46,7 +47,7 @@ const InnerTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export const Node = ({ data }) => {
+export const Node = ({ data, layout }) => {
   const [expand, setExpand] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -60,41 +61,39 @@ export const Node = ({ data }) => {
   const handleTooltipOpen = () => {
     expand ? setTooltipOpen(false) : setTooltipOpen(true);
   };
-  const handleTootltipClose = () => {
+  const handleTooltipClose = () => {
     setTooltipOpen(false);
   };
 
   return (
     <>
-      <Handle type="target" position={Position.Left} />
+      <Handle
+        type="target"
+        position={layout == "LR" ? Position.Left : Position.Top}
+      />
       {data.details && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
           open={tooltipOpen}
-          onClose={handleTootltipClose}
-          title={Object.keys(data?.details).map((key) => {
-            return (
-              <DataItem
-                style={{ gridTemplateColumns: "1fr 1fr" }}
-                key={data?.details?.identifier}
+          onClose={handleTooltipClose}
+          title={Object.keys(data?.details).map((key, index) => (
+            <DataItem style={{ gridTemplateColumns: "1fr 1fr" }} key={index}>
+              <span style={{ fontWeight: "bold" }}>
+                {capitalizeFirstLetter(key)}
+              </span>
+              <span
+                style={{
+                  maxWidth: "150px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  textAlign: "right",
+                }}
               >
-                <span style={{ fontWeight: "bold" }}>
-                  {capitalizeFirstLetter(key)}
-                </span>
-                <span
-                  style={{
-                    maxWidth: "150px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    textAlign: "right",
-                  }}
-                >
-                  {data?.details[key]}
-                </span>
-              </DataItem>
-            );
-          })}
+                {data?.details[key]}
+              </span>
+            </DataItem>
+          ))}
         >
           {" "}
           <DataContainer style={{ backgroundColor: `${entities[data?.name]}` }}>
@@ -187,7 +186,12 @@ export const Node = ({ data }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-      <Handle type="source" position={Position.Right} id="a" />
+
+      <Handle
+        type="source"
+        position={layout == "LR" ? Position.Right : Position.Bottom}
+        id="a"
+      />
     </>
   );
 };

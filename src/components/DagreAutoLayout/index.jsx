@@ -29,7 +29,7 @@ const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 const nodeWidth = 172;
-const nodeHeight = 36;
+const nodeHeight = 200;
 
 const getLayoutedElements = (nodes, edges, direction = "TB") => {
   const isHorizontal = direction === "LR";
@@ -82,11 +82,14 @@ const LayoutFlow = ({
 
   const nodeTypes = useMemo(
     () => ({
-      PurchaseOrder: Node,
-      PurchaseItem: Node,
-      Shipment: Node,
+      PurchaseOrder: (props) => <Node {...props} layout={layout} />,
+      PurchaseItem: (props) => <Node {...props} layout={layout} />,
+      Shipment: (props) => <Node {...props} layout={layout} />,
+      Lot: (props) => <Node {...props} layout={layout} />,
+      SaleOrderItem: (props) => <Node {...props} layout={layout} />,
+      Regrading: (props) => <Node {...props} layout={layout} />,
     }),
-    []
+    [layout]
   );
 
   const edgeTypes = useMemo(
@@ -94,6 +97,9 @@ const LayoutFlow = ({
       PurchaseOrder: Edge,
       PurchaseItem: Edge,
       Shipment: Edge,
+      Lot: Edge,
+      SaleOrderItem: Edge,
+      Regrading: Edge,
     }),
     []
   );
@@ -104,8 +110,9 @@ const LayoutFlow = ({
       initialEdges,
       layout
     );
-
+    console.log("Nodes: ", layoutedNodes);
     setNodes(layoutedNodes);
+    console.log("Edges: ", layoutedEdges);
     setEdges(layoutedEdges);
 
     return () => {
@@ -165,7 +172,7 @@ const LayoutFlow = ({
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
         panOnScroll
-        // onNodeClick={onNodeClick}
+        onNodeClick={onNodeClick}
         defaultViewport={viewPort}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}

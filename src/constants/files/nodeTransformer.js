@@ -1,4 +1,5 @@
 import { edgeColors } from "./entities";
+import { MarkerType } from "reactflow";
 
 export const transformToNodesAndEdges = (data, selectedNodes = []) => {
   let nodes = [];
@@ -26,6 +27,12 @@ export const transformToNodesAndEdges = (data, selectedNodes = []) => {
         target: node.node_id,
         style: {
           stroke: edgeColors[parentId.split("-")[0]],
+        },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: edgeColors[parentId.split("-")[0]],
+          width: 18,
+          height: 18,
         },
       });
     }
