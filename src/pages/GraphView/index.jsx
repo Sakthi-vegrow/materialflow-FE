@@ -41,7 +41,7 @@ export const GraphView = () => {
   const fetchGraphData = (
     entity = "PurchaseOrder",
     levelId = 19524,
-    level = 2
+    level = 4
   ) => {
     setLoading(true);
     axios
@@ -75,7 +75,7 @@ export const GraphView = () => {
     if (!showFullGraph) {
       fetchGraphData(entity, levelId);
     } else {
-      setViewPort(node.position);
+      // setViewPort(node.position);
       setLevel((level) => level + newLevel);
       fetchGraphData(entityDetails.entity, entityDetails.id, level + newLevel);
     }

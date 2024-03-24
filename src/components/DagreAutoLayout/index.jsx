@@ -14,7 +14,14 @@ import ReactFlow, {
 } from "reactflow";
 import dagre from "dagre";
 import "reactflow/dist/style.css";
-import { Button, ButtonGroup, Stack, Switch } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  Container,
+  Grid,
+  Stack,
+  Switch,
+} from "@mui/material";
 import { Node } from "../Nodes/Node";
 import Edge from "../Edges/Edge";
 
@@ -177,6 +184,8 @@ const LayoutFlow = ({
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
+        <Background color="black" />
+
         <Controls />
         <MiniMap nodeStrokeWidth={3} />
 
@@ -187,33 +196,63 @@ const LayoutFlow = ({
             alignContent={"center"}
             justifyContent={"center"}
           >
-            <ButtonGroup
-              variant="contained"
-              aria-label="Basic button group"
-              size="small"
-              sx={{ height: 20, width: 120, fontSize: 8 }}
-            >
+            <Grid Container>
               <Button
-                variant={Layout.VERTICAL === layout ? "contained" : "outlined"}
-                onClick={() => setLayout(Layout.VERTICAL)}
-                size="small"
-                sx={{ fontSize: 8 }}
-              >
-                Vertical
-              </Button>
-
-              <Button
-                variant={
-                  Layout.HORIZONTAL === layout ? "contained" : "outlined"
+                variant="contained"
+                onClick={() =>
+                  setLayout(
+                    layout == Layout.VERTICAL
+                      ? Layout.HORIZONTAL
+                      : Layout.VERTICAL
+                  )
                 }
-                onClick={() => setLayout(Layout.HORIZONTAL)}
                 size="small"
-                sx={{ fontSize: 8 }}
+                sx={{
+                  transform: `${
+                    layout == Layout.VERTICAL ? "rotate(90deg)" : "rotate(0deg)"
+                  }`,
+                  transformOrigin: "left center",
+                  gap: 0.7,
+                  position: "fixed",
+                  left: `${layout == Layout.VERTICAL ? "20px" : "10px"}`,
+                  top: `${layout == Layout.VERTICAL ? "70px" : "80px"}`,
+                  fontSize: 10,
+                  fontWeight: "bold",
+                  transition: "all 0.1s ease-in-out",
+                  background: "#1ab394",
+                  "&:hover": {
+                    background: "#0f766e",
+                  },
+                }}
               >
-                Horizontal
+                {layout == Layout.VERTICAL ? (
+                  <>
+                    <span style={{ transform: "rotate(-90deg)" }}>V</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>E</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>R</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>T</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>I</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>C</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>A</span>
+                    <span style={{ transform: "rotate(-90deg)" }}>L</span>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ transform: "rotate(0deg)" }}>H</span>
+                    <span style={{ transform: "rotate(0deg)" }}>O</span>
+                    <span style={{ transform: "rotate(0deg)" }}>R</span>
+                    <span style={{ transform: "rotate(0deg)" }}>I</span>
+                    <span style={{ transform: "rotate(0deg)" }}>Z</span>
+                    <span style={{ transform: "rotate(0deg)" }}>O</span>
+                    <span style={{ transform: "rotate(0deg)" }}>N</span>
+                    <span style={{ transform: "rotate(0deg)" }}>T</span>
+                    <span style={{ transform: "rotate(0deg)" }}>A</span>
+                    <span style={{ transform: "rotate(0deg)" }}>L</span>
+                  </>
+                )}
               </Button>
-            </ButtonGroup>
-            <div>
+            </Grid>
+            <div style={{ position: "fixed", right: 10 }}>
               <Switch
                 {...label}
                 name="Show Full Graph"
