@@ -99,7 +99,6 @@ function HomeInput() {
   };
 
   const handleSubmit = () => {
-    alert(tabValue);
     if (tabValue == 0) {
       if (formData.entity == "" || formData.id == "") {
         setEmptyAlert(true);
@@ -136,6 +135,7 @@ function HomeInput() {
             email: email,
           })
           .then((data) => {
+            setEmptyAlert(true);
             setCsvApiSuccess(true);
           })
           .catch(console.log);
@@ -150,8 +150,8 @@ function HomeInput() {
     if (reason === "clickaway") {
       return;
     }
-    setCsvApiSuccess(false);
     setEmptyAlert(false);
+    setCsvApiSuccess(false);
   };
 
   const handleTabChange = (event, newValue) => {
@@ -173,15 +173,17 @@ function HomeInput() {
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [jsonData, setJsonData] = useState("");
+  const [jsonData, setJsonData] = useState([]);
 
   const convertCsvtoJson = (csvContent) => {
-    const lines = csvContent.split("\n");
+    const lines = csvContent.split(/\r?\n/); // Handle both \n and \r\n line endings
     const headers = lines[0].split(",");
+    console.log("LINES: ", lines);
+    console.log("HEADERS: ", headers);
     const data = lines.slice(1).map((line) => {
       const values = line.split(",");
       return headers.reduce((obj, header, index) => {
-        obj[header.trim()] = values[index].trim();
+        obj[header.trim()] = values[index] ? values[index].trim() : ""; // Handle empty values
         return obj;
       }, {});
     });
@@ -197,6 +199,7 @@ function HomeInput() {
       reader.onload = (event) => {
         const content = event.target.result;
         const jsonOutput = convertCsvtoJson(content);
+        console.log("JSON OUTPUT: ", jsonOutput);
         setJsonData(jsonOutput);
       };
       reader.readAsText(file);
