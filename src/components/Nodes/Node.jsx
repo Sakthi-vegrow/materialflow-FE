@@ -58,7 +58,6 @@ export const Node = ({ data, layout }) => {
     setExpand((expand) => {
       return !expand;
     });
-    alert(NodeProps.data?.xPos);
     e.stopPropagation();
   };
   const handleTooltipOpen = () => {

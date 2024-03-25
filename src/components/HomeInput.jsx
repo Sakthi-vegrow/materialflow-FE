@@ -113,14 +113,14 @@ function HomeInput() {
         setEmptyAlert(true);
       } else {
         axios
-          .post(URL + `material_flow/get_endpoints`, {
+          .post(URL + `material_flow/get_endpoints.json`, {
             headers: { "ngrok-skip-browser-warning": true },
-            body: { csv_data: JSON.stringify(formData) },
+            csv_data: JSON.stringify(formData),
           })
           .then(({ data }) => {
             console.log("data from api: ", data);
             // setGraphData(
-            //   convertJsonToNodesAndEdges(formData, data, true) // true for showleaf value
+            //   convertJsonToNodesAndEdges(data, formData, true) // true for showleaf value
             // );
           })
           .catch(console.log);
@@ -130,9 +130,10 @@ function HomeInput() {
         setEmptyAlert(true);
       } else {
         axios
-          .post(URL + `material_flow/get_endpoints`, {
+          .post(URL + `material_flow/get_endpoints.json`, {
             headers: { "ngrok-skip-browser-warning": true },
-            body: { csv_data: jsonData, email: email },
+            csv_data: jsonData,
+            email: email,
           })
           .then((data) => {
             setCsvApiSuccess(true);

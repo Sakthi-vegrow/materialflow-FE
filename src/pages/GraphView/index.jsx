@@ -58,6 +58,7 @@ export const GraphView = () => {
     };
 
   const handleNodeClick = (e, node) => {
+    console.log("clicked leaf node: ", node);
     if (node.is_leaf) {
       alert("Its a leaf");
       return;
