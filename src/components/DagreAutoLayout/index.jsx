@@ -129,8 +129,7 @@ const LayoutFlow = ({
   }, [initialNodes, initialEdges, layout]);
 
   useEffect(() => {
-    // if (!showFullGraph)
-    // fitView();
+    if (!showFullGraph) fitView();
     return () => {};
   }, [nodes]);
 

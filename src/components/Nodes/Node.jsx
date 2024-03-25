@@ -2,18 +2,15 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
 import styled from "styled-components";
-import { entities } from "../../constants/files/entities";
+import { entities, leafColor } from "../../constants/files/entities";
 import { Button, IconButton } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import "./Node.css";
 import { Layout } from "../DagreAutoLayout";
+import { capitalizeFirstLetter } from "../DagreAutoLayout/helpers/capitalizeFirstLetter";
 
 const handleStyle = { left: 10 };
-
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
 
 const DataContainer = styled("div")({
   padding: 20,
@@ -61,9 +58,9 @@ export const Node = ({ data, layout }) => {
     setExpand((expand) => {
       return !expand;
     });
+    alert(NodeProps.data?.xPos);
     e.stopPropagation();
   };
-
   const handleTooltipOpen = () => {
     expand ? setTooltipOpen(false) : setTooltipOpen(true);
   };
@@ -108,7 +105,7 @@ export const Node = ({ data, layout }) => {
           <DataContainer
             style={{
               backgroundColor: `${
-                data?.is_leaf ? "#4CCD99" : entities[data?.name]
+                data?.is_leaf ? leafColor : entities[data?.name]
               }`,
             }}
           >

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import LayoutFlow from "../../components/DagreAutoLayout";
 import { transformToNodesAndEdges } from "../../constants/files/nodeTransformer";
 import { URL } from "../../../env";
-import { ReactFlowProvider } from "reactflow";
+import { ReactFlowProvider, useReactFlow } from "reactflow";
 import { Backdrop, CircularProgress } from "@mui/material";
 import ButtonAppBar from "../ButtonAppBar";
 import { useParams } from "react-router";
@@ -19,7 +19,6 @@ export const GraphView = () => {
   const [level, setLevel] = useState(2);
   const [showFullGraph, setShowFullGraph] = useState(true);
   const [viewPort, setViewPort] = useState({ x: 0, y: 0 });
-
   const [entityDetails, setEntityDetails] = useState({});
 
   const [selectedNodes, setSelectedNodes] = useState([]);
@@ -100,24 +99,24 @@ export const GraphView = () => {
   }, [selectedNodes]);
 
   return (
-    <div className="">
-      <ButtonAppBar />
+    <ReactFlowProvider>
+      <div className="">
+        <ButtonAppBar />
 
-      <NodesBreadcrumbs
-        activeNodes={selectedNodes}
-        fetchGraph={fetchGraphData}
-        activate={!showFullGraph}
-        updateHistory={updateHistoryNodes}
-      />
+        <NodesBreadcrumbs
+          activeNodes={selectedNodes}
+          fetchGraph={fetchGraphData}
+          activate={!showFullGraph}
+          updateHistory={updateHistoryNodes}
+        />
 
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      {graphData.nodes.length ? (
-        <ReactFlowProvider>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        {graphData.nodes.length ? (
           <LayoutFlow
             initialNodes={graphData.nodes}
             initialEdges={graphData.edges}
@@ -128,17 +127,17 @@ export const GraphView = () => {
             setShowFullGraph={setShowFullGraph}
             showFullGraph={showFullGraph}
           />
-        </ReactFlowProvider>
-      ) : (
-        <div
-          style={{
-            textAlign: "center",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        ></div>
-      )}
-    </div>
+        ) : (
+          <div
+            style={{
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          ></div>
+        )}
+      </div>
+    </ReactFlowProvider>
   );
 };
