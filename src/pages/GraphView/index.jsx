@@ -122,8 +122,8 @@ export const GraphView = () => {
         </Backdrop>
         {graphData.nodes.length ? (
           <LayoutFlow
-            initialNodes={graphData.nodes}
-            initialEdges={graphData.edges}
+            initialNodes={[...graphData.nodes]}
+            initialEdges={[...graphData.edges]}
             onNodeClick={handleNodeClick}
             setLevel={setLevel}
             level={level}
