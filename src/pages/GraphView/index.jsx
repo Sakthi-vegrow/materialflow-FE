@@ -9,6 +9,7 @@ import ButtonAppBar from "../ButtonAppBar";
 import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { ENTITIES } from "../../constants";
+import NodesBreadcrumbs from "../../components/DagreAutoLayout/helpers/NodesBreadCrumb";
 
 export const GraphView = () => {
   const { id, entity } = useParams();
@@ -19,12 +20,9 @@ export const GraphView = () => {
   const [showFullGraph, setShowFullGraph] = useState(true);
   const [viewPort, setViewPort] = useState({ x: 0, y: 0 });
 
-  const [entityDetails, setEntityDetails] = useState({
-    entity: "PurchaseOrder",
-    id: 19524,
-  });
+  const [entityDetails, setEntityDetails] = useState({});
 
-  const [selectedNodes, setSelectedNodes] = useState([ENTITIES[0]]);
+  const [selectedNodes, setSelectedNodes] = useState([]);
 
   useEffect(() => {
     setEntityDetails({
@@ -38,31 +36,29 @@ export const GraphView = () => {
     return () => {};
   }, []);
 
-  const fetchGraphData = (
-    entity = "PurchaseOrder",
-    levelId = 19524,
-    level = 4
-  ) => {
-    setLoading(true);
-    axios
-      .get(
-        URL +
-          `material_flow/index?entity=${entity}&entity_id=${levelId}&layers=${level}&reverse=${rev.get(
-            "reverse"
-          )}`,
-        {
-          headers: { "ngrok-skip-browser-warning": true },
-        }
-      )
-      .then(({ data }) => {
-        setGraphData(transformToNodesAndEdges(data, selectedNodes));
-        setLoading(false);
-      })
-      .catch(console.log);
-  };
+  const fetchGraphData = (entity, id) =>
+    // entity = "PurchaseOrder",
+    // levelId = 19524,
+    {
+      setLoading(true);
+      axios
+        .get(
+          URL +
+            `material_flow/index?entity=${entity}&entity_id=${id}&layers=${level}&reverse=${rev.get(
+              "reverse"
+            )}`,
+          {
+            headers: { "ngrok-skip-browser-warning": true },
+          }
+        )
+        .then(({ data }) => {
+          setGraphData(transformToNodesAndEdges(data));
+          setLoading(false);
+        })
+        .catch(console.log);
+    };
 
   const handleNodeClick = (e, node) => {
-    console.log(node);
     if (node.is_leaf) {
       alert("Its a leaf");
       return;
@@ -71,20 +67,49 @@ export const GraphView = () => {
     let [entity, levelId] = node.data.label.split("-");
     const newLevel = node.depth + 2;
 
-    setSelectedNodes((nodes) => [...nodes, levelId]);
+    setSelectedNodes((nodes) =>
+      nodes.some((prevNode) => prevNode.id === node.id)
+        ? nodes
+        : [...nodes, node]
+    );
     if (!showFullGraph) {
       fetchGraphData(entity, levelId);
     } else {
-      // setViewPort(node.position);
+      setViewPort(node.position);
       setLevel((level) => level + newLevel);
       fetchGraphData(entityDetails.entity, entityDetails.id, level + newLevel);
     }
   };
+
+  const updateHistoryNodes = (node) => {
+    alert(node.id);
+    const newNodes = [];
+    for (const obj of selectedNodes) {
+      newNodes.push(obj);
+
+      if (obj.id === node.id) {
+        break; // Stop looping once the target object is found
+      }
+    }
+    console.log("New nodes: ", newNodes);
+    setSelectedNodes(newNodes);
+  };
+
+  useEffect(() => {
+    console.log("SelectedNodes: ", selectedNodes);
+  }, [selectedNodes]);
+
   return (
     <div className="">
       <ButtonAppBar />
 
-      {/* <NodesBreadcrumbs activeNodes={selectedNodes} /> */}
+      <NodesBreadcrumbs
+        activeNodes={selectedNodes}
+        fetchGraph={fetchGraphData}
+        activate={!showFullGraph}
+        updateHistory={updateHistoryNodes}
+      />
+
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -99,7 +124,7 @@ export const GraphView = () => {
             onNodeClick={handleNodeClick}
             setLevel={setLevel}
             level={level}
-            viewPort={viewPort}
+            // viewPort={viewPort}
             setShowFullGraph={setShowFullGraph}
             showFullGraph={showFullGraph}
           />

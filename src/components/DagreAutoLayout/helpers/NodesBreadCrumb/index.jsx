@@ -3,11 +3,6 @@ import Link from "@mui/material/Link";
 import { ENTITIES, THEME } from "../../../../constants";
 import styled from "styled-components";
 
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
-
 // const StyledBreadcrumb = styled(Chip)(() => {
 //     const backgroundColor = "#a7a7a7";
 //     return {
@@ -26,32 +21,47 @@ function handleClick(event) {
 //   });
 
 const Container = styled("div")({
-  padding: 20,
+  padding: "10px 20px 10px 20px",
   border: "1px solid lightgrey",
 });
 
-export default function NodesBreadcrumbs({ activeNodes }) {
-  console.log(activeNodes, ENTITIES);
+export default function NodesBreadcrumbs({
+  activeNodes,
+  fetchGraph,
+  activate,
+  updateHistory,
+}) {
+  const handleClick = (event, node) => {
+    console.log("Event: ", node);
+    event.preventDefault();
+    let [entity, id] = node.id.split("-");
+    updateHistory(node);
+    fetchGraph(entity, id);
+  };
+
   return (
-    <Container role="presentation" onClick={handleClick}>
+    <Container role="presentation">
       <Breadcrumbs aria-label="breadcrumb">
-        {ENTITIES.map((entity) => {
-          return (
-            <Link
-              underline="hover"
-              color="inherit"
-              href="/"
-              key={entity}
-              style={{
-                color: activeNodes?.includes(entity)
-                  ? THEME.primary
-                  : THEME.grey,
-              }}
-            >
-              {entity}
-            </Link>
-          );
-        })}
+        {activate && activeNodes.length > 0 ? (
+          activeNodes.map((node) => {
+            return (
+              <Link
+                underline="hover"
+                color="inherit"
+                key={node.id}
+                sx={{
+                  cursor: "pointer",
+                  userSelect: "none",
+                }}
+                onClick={(e) => handleClick(e, node)}
+              >
+                {node.id.split("-")[0]}
+              </Link>
+            );
+          })
+        ) : (
+          <span>Your history will appear here..</span>
+        )}
       </Breadcrumbs>
     </Container>
   );

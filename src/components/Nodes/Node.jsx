@@ -7,6 +7,7 @@ import { Button, IconButton } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import "./Node.css";
+import { Layout } from "../DagreAutoLayout";
 
 const handleStyle = { left: 10 };
 
@@ -19,6 +20,11 @@ const DataContainer = styled("div")({
   paddingTop: 30,
   border: "1px solid lightgrey",
   minWidth: "100px",
+  border: "1px solid black !important",
+  borderRadius: "5px",
+  "&:hover": {
+    border: "1px solid #8b3dff !important",
+  },
 });
 
 const DataItem = styled("div")({
@@ -67,10 +73,13 @@ export const Node = ({ data, layout }) => {
 
   return (
     <>
-      <Handle
-        type="target"
-        position={layout == "LR" ? Position.Left : Position.Top}
-      />
+      {data.parent_id && (
+        <Handle
+          type="target"
+          position={layout == Layout.HORIZONTAL ? Position.Left : Position.Top}
+          style={{}}
+        />
+      )}
       {data.details && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
@@ -96,12 +105,20 @@ export const Node = ({ data, layout }) => {
           ))}
         >
           {" "}
-          <DataContainer style={{ backgroundColor: `${entities[data?.name]}` }}>
+          <DataContainer
+            style={{
+              backgroundColor: `${
+                data?.is_leaf ? "#4CCD99" : entities[data?.name]
+              }`,
+            }}
+          >
             {!expand ? (
               <DataItem style={{ textAlign: "center" }}>
-                {data?.name}
+                <span style={{ color: "#5928E5" }}>{data?.name}</span>
                 <br />
-                {data?.node_id?.split("-").slice(1)}
+                <span style={{ color: "#E91E63" }}>
+                  {data?.node_id?.split("-").slice(1)}
+                </span>
                 <br />
                 <div style={{ position: "absolute", right: 0, top: 0 }}>
                   <IconButton onClick={(e) => expandHandler(e)}>
@@ -115,29 +132,39 @@ export const Node = ({ data, layout }) => {
               </DataItem>
             ) : (
               <>
-                <DataItem style={{ gridTemplateColumns: "1fr 1fr" }}>
-                  <span style={{ fontWeight: "bold" }}>Entity </span>
+                <DataItem style={{ gridTemplateColumns: "1fr 0.5fr" }}>
+                  <span style={{ fontWeight: "bold", color: "#5928E5" }}>
+                    Entity{" "}
+                  </span>
                   <span
                     style={{
-                      maxWidth: "150px",
+                      minWidth: "150px",
+                      maxWidth: "250px",
+
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
                       textAlign: "right",
+                      color: "#E91E63",
                     }}
                   >
                     {data?.name}
                   </span>
                 </DataItem>{" "}
-                <DataItem style={{ gridTemplateColumns: "1fr 1fr" }}>
-                  <span style={{ fontWeight: "bold" }}>ID </span>
+                <DataItem style={{ gridTemplateColumns: "1fr 0.5fr" }}>
+                  <span style={{ fontWeight: "bold", color: "#5928E5" }}>
+                    ID{" "}
+                  </span>
                   <span
                     style={{
-                      maxWidth: "150px",
+                      minWidth: "150px",
+                      maxWidth: "250px",
+
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
                       textAlign: "right",
+                      color: "#E91E63",
                     }}
                   >
                     {data?.node_id.split("-").slice(1)}
@@ -147,10 +174,12 @@ export const Node = ({ data, layout }) => {
                   Object.keys(data?.details).map((key) => {
                     return (
                       <DataItem
-                        style={{ gridTemplateColumns: "1fr 1fr" }}
+                        style={{
+                          gridTemplateColumns: "1fr 0.5fr",
+                        }}
                         key={data?.details?.identifier}
                       >
-                        <span style={{ fontWeight: "bold" }}>
+                        <span style={{ fontWeight: "bold", color: "#5928E5" }}>
                           {capitalizeFirstLetter(key)}
                         </span>
                         <InnerTooltip
@@ -159,11 +188,13 @@ export const Node = ({ data, layout }) => {
                         >
                           <span
                             style={{
-                              maxWidth: "150px",
+                              minWidth: "150px",
+                              maxWidth: "250px",
                               overflow: "hidden",
                               textOverflow: "ellipsis",
                               whiteSpace: "nowrap",
                               textAlign: "right",
+                              color: "#E91E63",
                             }}
                           >
                             {data?.details[key]}
@@ -172,7 +203,13 @@ export const Node = ({ data, layout }) => {
                       </DataItem>
                     );
                   })}
-                <div style={{ position: "absolute", right: 0, top: 0 }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                  }}
+                >
                   <IconButton onClick={(e) => expandHandler(e)}>
                     {expand ? (
                       <CloseOutlinedIcon />
@@ -186,11 +223,13 @@ export const Node = ({ data, layout }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-
       <Handle
         type="source"
-        position={layout == "LR" ? Position.Right : Position.Bottom}
+        position={
+          layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
+        }
         id="a"
+        style={{}}
       />
     </>
   );

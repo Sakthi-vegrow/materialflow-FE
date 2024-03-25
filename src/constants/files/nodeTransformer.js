@@ -1,19 +1,25 @@
 import { edgeColors } from "./entities";
 import { MarkerType } from "reactflow";
 
-export const transformToNodesAndEdges = (data, selectedNodes = []) => {
+export const transformToNodesAndEdges = (data) => {
   let nodes = [];
   let edges = [];
 
   const traverse = (node, parentId, depth = 0) => {
-    let [entity, levelId] = node.node_id.split("-");
+    if (node.nodeid) {
+      alert("Present");
+    } else {
+      console.info("Not Present: ", node);
+    }
+    let [entity, levelId] = node.node_id?.split("-");
 
     let currentNode = {
       id: node.node_id,
       data: {
         label: node.node_id,
         ...node,
-        isSelected: selectedNodes.includes(levelId),
+        // isSelected: selectedNodes.includes(levelId),
+        isSelected: false,
       },
       position: { x: 0, y: 0 },
       depth,
@@ -21,6 +27,7 @@ export const transformToNodesAndEdges = (data, selectedNodes = []) => {
     };
 
     if (parentId) {
+      console.log("Node: ", node);
       edges.push({
         id: `e${parentId}-${node.node_id}`,
         source: parentId,

@@ -27,46 +27,13 @@ import Edge from "../Edges/Edge";
 
 const label = { inputProps: { "aria-label": "Clear Old Nodes" } };
 
-const Layout = {
+export const Layout = {
   HORIZONTAL: "LR",
   VERTICAL: "TB",
 };
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-const nodeWidth = 172;
-const nodeHeight = 200;
-
-const getLayoutedElements = (nodes, edges, direction = "TB") => {
-  const isHorizontal = direction === "LR";
-  dagreGraph.setGraph({ rankdir: direction });
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  nodes.forEach((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = isHorizontal ? "left" : "top";
-    node.sourcePosition = isHorizontal ? "right" : "bottom";
-
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
-    };
-
-    return node;
-  });
-
-  return { nodes, edges };
-};
 
 const LayoutFlow = ({
   initialNodes,
@@ -111,6 +78,39 @@ const LayoutFlow = ({
     []
   );
 
+  const nodeWidth = layout == Layout.HORIZONTAL ? 400 : 172;
+  const nodeHeight = layout == Layout.HORIZONTAL ? 200 : 300;
+
+  const getLayoutedElements = (nodes, edges, direction = "TB") => {
+    const isHorizontal = direction === "LR";
+    dagreGraph.setGraph({ rankdir: direction });
+
+    nodes.forEach((node) => {
+      dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+    });
+
+    edges.forEach((edge) => {
+      dagreGraph.setEdge(edge.source, edge.target);
+    });
+
+    dagre.layout(dagreGraph);
+
+    nodes.forEach((node) => {
+      const nodeWithPosition = dagreGraph.node(node.id);
+      node.targetPosition = isHorizontal ? "left" : "top";
+      node.sourcePosition = isHorizontal ? "right" : "bottom";
+
+      node.position = {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      };
+
+      return node;
+    });
+
+    return { nodes, edges };
+  };
+
   useEffect(() => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       initialNodes,
@@ -130,7 +130,7 @@ const LayoutFlow = ({
 
   useEffect(() => {
     // if (!showFullGraph)
-    fitView();
+    // fitView();
     return () => {};
   }, [nodes]);
 
@@ -184,9 +184,9 @@ const LayoutFlow = ({
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
-        <Background color="black" />
+        <Background color="black" style={{ background: "#fff" }} />
 
-        <Controls />
+        <Controls style={{ position: "fixed", bottom: "100" }} />
         <MiniMap nodeStrokeWidth={3} />
 
         <Panel position="top-left">
@@ -209,23 +209,23 @@ const LayoutFlow = ({
                 size="small"
                 sx={{
                   transform: `${
-                    layout == Layout.VERTICAL ? "rotate(90deg)" : "rotate(0deg)"
+                    layout != Layout.VERTICAL ? "rotate(90deg)" : "rotate(0deg)"
                   }`,
                   transformOrigin: "left center",
                   gap: 0.7,
                   position: "fixed",
-                  left: `${layout == Layout.VERTICAL ? "20px" : "10px"}`,
-                  top: `${layout == Layout.VERTICAL ? "70px" : "80px"}`,
+                  left: `${layout != Layout.VERTICAL ? "20px" : "10px"}`,
+                  top: `${layout != Layout.VERTICAL ? "105px" : "115px"}`,
                   fontSize: 10,
                   fontWeight: "bold",
                   transition: "all 0.1s ease-in-out",
-                  background: "#1ab394",
+                  background: "#8b3dff",
                   "&:hover": {
-                    background: "#0f766e",
+                    background: "#6b2bcc",
                   },
                 }}
               >
-                {layout == Layout.VERTICAL ? (
+                {layout != Layout.VERTICAL ? (
                   <>
                     <span style={{ transform: "rotate(-90deg)" }}>V</span>
                     <span style={{ transform: "rotate(-90deg)" }}>E</span>
@@ -252,7 +252,7 @@ const LayoutFlow = ({
                 )}
               </Button>
             </Grid>
-            <div style={{ position: "fixed", right: 10 }}>
+            <div style={{ position: "fixed", right: 10, top: 75 }}>
               <Switch
                 {...label}
                 name="Show Full Graph"
@@ -262,7 +262,7 @@ const LayoutFlow = ({
                   setShowFullGraph((val) => !val);
                 }}
               />
-              <span style={{ fontSize: 10 }}>Show Full Graph</span>
+              <span style={{ fontSize: 10 }}>Full Graph</span>
             </div>
 
             {/* <Select
