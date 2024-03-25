@@ -62,7 +62,15 @@ export const transformToNodesAndEdges = (data) => {
   };
 };
 
-export const convertJsonToNodesAndEdges = (jsonData, oldGraphData) => {
+export const convertJsonToNodesAndEdges = (
+  jsonData,
+  oldGraphData,
+  showLeaf = false
+) => {
+  if (showLeaf == true) {
+    let nodes = [];
+    let edges = [];
+  }
   let nodes = oldGraphData.nodes || [];
   let edges = oldGraphData.edges || [];
 
@@ -99,8 +107,8 @@ export const convertJsonToNodesAndEdges = (jsonData, oldGraphData) => {
             source: parentId,
             target: node.node_id,
             // Assuming edge colors and marker type are predefined
-            style: { stroke: '#000' }, // You can customize edge style here
-            markerEnd: { type: 'arrow' }, // You can customize marker type here
+            style: { stroke: "#000" }, // You can customize edge style here
+            markerEnd: { type: "arrow" }, // You can customize marker type here
           });
           existingEdgeIds.add(edgeId);
         }
@@ -110,5 +118,3 @@ export const convertJsonToNodesAndEdges = (jsonData, oldGraphData) => {
 
   return { nodes, edges };
 };
-
-

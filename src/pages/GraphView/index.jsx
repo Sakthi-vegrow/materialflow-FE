@@ -51,7 +51,7 @@ export const GraphView = () => {
           }
         )
         .then(({ data }) => {
-          setGraphData(convertJsonToNodesAndEdges(data, graphData));
+          setGraphData(convertJsonToNodesAndEdges(data, graphData, false));
           setLoading(false);
         })
         .catch(console.log);
@@ -98,9 +98,9 @@ export const GraphView = () => {
     console.log("SelectedNodes: ", selectedNodes);
   }, [selectedNodes]);
 
-  useEffect(()=>{
-    console.log("Updated GraphData: ", graphData, "LEVEL: ", level)
-  },[graphData])
+  useEffect(() => {
+    console.log("Updated GraphData: ", graphData, "LEVEL: ", level);
+  }, [graphData]);
 
   return (
     <ReactFlowProvider>
