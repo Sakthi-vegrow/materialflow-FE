@@ -61,3 +61,54 @@ export const transformToNodesAndEdges = (data) => {
     edges,
   };
 };
+
+export const convertJsonToNodesAndEdges = (jsonData, oldGraphData) => {
+  let nodes = oldGraphData.nodes || [];
+  let edges = oldGraphData.edges || [];
+
+  const existingNodeIds = new Set(nodes.map((node) => node.id));
+  const existingEdgeIds = new Set(edges.map((edge) => edge.id));
+
+  Object.keys(jsonData).forEach((key) => {
+    const node = jsonData[key];
+    let [entity, levelId] = node.node_id.split("-");
+
+    if (!existingNodeIds.has(node.node_id)) {
+      let currentNode = {
+        id: node.node_id,
+        data: {
+          label: node.node_id,
+          ...node,
+          isSelected: false,
+        },
+        position: { x: 0, y: 0 },
+        depth: 0,
+        type: entity || "PurchaseOrder",
+      };
+
+      nodes.push(currentNode);
+      existingNodeIds.add(node.node_id);
+    }
+
+    if (node.parent_id && node.parent_id.length > 0) {
+      node.parent_id.forEach((parentId) => {
+        const edgeId = `e${parentId}-${node.node_id}`;
+        if (!existingEdgeIds.has(edgeId)) {
+          edges.push({
+            id: edgeId,
+            source: parentId,
+            target: node.node_id,
+            // Assuming edge colors and marker type are predefined
+            style: { stroke: '#000' }, // You can customize edge style here
+            markerEnd: { type: 'arrow' }, // You can customize marker type here
+          });
+          existingEdgeIds.add(edgeId);
+        }
+      });
+    }
+  });
+
+  return { nodes, edges };
+};
+
+

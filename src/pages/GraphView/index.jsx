@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import LayoutFlow from "../../components/DagreAutoLayout";
-import { transformToNodesAndEdges } from "../../constants/files/nodeTransformer";
+import { convertJsonToNodesAndEdges } from "../../constants/files/nodeTransformer";
 import { URL } from "../../../env";
 import { ReactFlowProvider, useReactFlow } from "reactflow";
 import { Backdrop, CircularProgress } from "@mui/material";
@@ -16,7 +16,7 @@ export const GraphView = () => {
   const [rev] = useSearchParams();
   const [graphData, setGraphData] = useState({ nodes: [], edges: [] });
   const [loading, setLoading] = useState(false);
-  const [level, setLevel] = useState(2);
+  const [level, setLevel] = useState(5);
   const [showFullGraph, setShowFullGraph] = useState(true);
   const [viewPort, setViewPort] = useState({ x: 0, y: 0 });
   const [entityDetails, setEntityDetails] = useState({});
@@ -43,7 +43,7 @@ export const GraphView = () => {
       axios
         .get(
           URL +
-            `material_flow/index?entity=${entity}&entity_id=${id}&layers=${level}&reverse=${rev.get(
+            `material_flow/graph_traverse?entity=${entity}&entity_id=${id}&layers=5&reverse=${rev.get(
               "reverse"
             )}`,
           {
@@ -51,7 +51,7 @@ export const GraphView = () => {
           }
         )
         .then(({ data }) => {
-          setGraphData(transformToNodesAndEdges(data));
+          setGraphData(convertJsonToNodesAndEdges(data, graphData));
           setLoading(false);
         })
         .catch(console.log);
@@ -64,7 +64,7 @@ export const GraphView = () => {
     }
 
     let [entity, levelId] = node.data.label.split("-");
-    const newLevel = node.depth + 2;
+    const newLevel = level + level;
 
     setSelectedNodes((nodes) =>
       nodes.some((prevNode) => prevNode.id === node.id)
@@ -75,8 +75,8 @@ export const GraphView = () => {
       fetchGraphData(entity, levelId);
     } else {
       setViewPort(node.position);
-      setLevel((level) => level + newLevel);
-      fetchGraphData(entityDetails.entity, entityDetails.id, level + newLevel);
+      setLevel(newLevel);
+      fetchGraphData(entity, levelId);
     }
   };
 
@@ -97,6 +97,10 @@ export const GraphView = () => {
   useEffect(() => {
     console.log("SelectedNodes: ", selectedNodes);
   }, [selectedNodes]);
+
+  useEffect(()=>{
+    console.log("Updated GraphData: ", graphData, "LEVEL: ", level)
+  },[graphData])
 
   return (
     <ReactFlowProvider>
