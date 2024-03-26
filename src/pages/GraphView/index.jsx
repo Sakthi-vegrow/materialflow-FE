@@ -1,16 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LayoutFlow from "../../components/DagreAutoLayout";
 import { convertJsonToNodesAndEdges } from "../../constants/files/nodeTransformer";
 import { URL } from "../../../env";
 import { ReactFlowProvider, useReactFlow } from "reactflow";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton } from "@mui/material";
 import ButtonAppBar from "../ButtonAppBar";
 import { useParams } from "react-router";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { ENTITIES } from "../../constants";
 import NodesBreadcrumbs from "../../components/DagreAutoLayout/helpers/NodesBreadCrumb";
 import { layerCount } from "../../constants/files/entities";
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
+import Alert from "@mui/material/Alert";
 
 export const GraphView = () => {
   const { id, entity } = useParams();
@@ -24,6 +27,7 @@ export const GraphView = () => {
 
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [fetchleaf, setFetchleaf] = useState();
+  const [snackOpen, setSnackOpen] = useState(false);
 
   useEffect(() => {
     setEntityDetails({
@@ -57,7 +61,9 @@ export const GraphView = () => {
           setGraphData(convertJsonToNodesAndEdges(data, { entity, id }, true));
           setLoading(false);
         })
-        .catch(console.log);
+        .catch((error) => {
+          setSnackOpen(true);
+        });
     } else {
       axios
         .get(
@@ -75,7 +81,9 @@ export const GraphView = () => {
           );
           setLoading(false);
         })
-        .catch(console.log);
+        .catch((error) => {
+          setSnackOpen(true);
+        });
     }
   };
 
@@ -127,10 +135,44 @@ export const GraphView = () => {
     );
   }, [graphData]);
 
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+  };
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleSnackbarClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <ReactFlowProvider>
       <div className="">
         <ButtonAppBar />
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          action={action}
+        >
+          <Alert
+            onClose={handleSnackbarClose}
+            severity="error"
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            Error fetching from API
+          </Alert>
+        </Snackbar>
         {!fetchleaf && (
           <NodesBreadcrumbs
             activeNodes={selectedNodes}
