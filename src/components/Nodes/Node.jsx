@@ -70,17 +70,16 @@ export const Node = ({ data, layout }) => {
 
   useEffect(() => {
     setFetchleaf(rev.get("fetchleaf"));
+    console.log("NODE PARAM: ", rev.get("fetchleaf"));
   }, []);
 
   return (
     <>
-      {((fetchleaf && data.details) || (!fetchleaf && data.parent_id)) && (
-        <Handle
-          type="target"
-          position={layout == Layout.HORIZONTAL ? Position.Left : Position.Top}
-          style={{}}
-        />
-      )}
+      <Handle
+        type="target"
+        position={layout == Layout.HORIZONTAL ? Position.Left : Position.Top}
+        style={{}}
+      />
       {fetchleaf && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
