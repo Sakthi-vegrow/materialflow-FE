@@ -77,9 +77,9 @@ function HomeInput() {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = React.useState(0);
 
-  useEffect(() => {
-    setTabValue(0);
-  }, []);
+  // useEffect(() => {
+  //   setTabValue(0);
+  // }, []);
 
   const defaultFormData = {
     entity: "",
