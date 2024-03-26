@@ -22,23 +22,29 @@ export const GraphView = () => {
   const [entityDetails, setEntityDetails] = useState({});
 
   const [selectedNodes, setSelectedNodes] = useState([]);
+  const [fetchleaf, setFetchleaf] = useState();
 
   useEffect(() => {
     setEntityDetails({
       id,
       entity,
     });
+    // setSelectedNodes([{ entity, id }]);
   }, [id, entity]);
 
   useEffect(() => {
-    fetchGraphData(entity, id);
+    console.log("params: ", rev.get("fetchleaf"));
+    setFetchleaf(rev.get("fetchleaf") == "true");
     return () => {};
   }, []);
 
-  const fetchleaf = rev.get("fetchleaf");
+  useEffect(() => {
+    if (fetchleaf != null) fetchGraphData(entity, id);
+  }, [fetchleaf]);
 
   const fetchGraphData = (entity, id) => {
     setLoading(true);
+    console.log("FETCHLEAF from API: ", fetchleaf);
     if (fetchleaf) {
       axios
         .post(URL + `material_flow/get_endpoints.json`, {
@@ -64,7 +70,7 @@ export const GraphView = () => {
         )
         .then(({ data }) => {
           setGraphData(
-            convertJsonToNodesAndEdges(data, graphData, false, showFullGraph)
+            convertJsonToNodesAndEdges(data, graphData, false, true)
           );
           setLoading(false);
         })
@@ -96,7 +102,6 @@ export const GraphView = () => {
   };
 
   const updateHistoryNodes = (node) => {
-    alert(node.id);
     const newNodes = [];
     for (const obj of selectedNodes) {
       newNodes.push(obj);
@@ -105,7 +110,6 @@ export const GraphView = () => {
         break; // Stop looping once the target object is found
       }
     }
-    console.log("New nodes: ", newNodes);
     setSelectedNodes(newNodes);
   };
 

@@ -9,6 +9,7 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 import "./Node.css";
 import { Layout } from "../DagreAutoLayout";
 import { capitalizeFirstLetter } from "../DagreAutoLayout/helpers/capitalizeFirstLetter";
+import { useSearchParams } from "react-router-dom";
 
 const handleStyle = { left: 10 };
 
@@ -53,6 +54,8 @@ const InnerTooltip = styled(({ className, ...props }) => (
 export const Node = ({ data, layout }) => {
   const [expand, setExpand] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [fetchleaf, setFetchleaf] = useState(false);
+  const [rev] = useSearchParams();
 
   const expandHandler = (e) => {
     setExpand((expand) => {
@@ -67,16 +70,172 @@ export const Node = ({ data, layout }) => {
     setTooltipOpen(false);
   };
 
+  useEffect(() => {
+    setFetchleaf(rev.get("fetchleaf"));
+  }, []);
+
   return (
     <>
-      {data.parent_id && (
+      {(data.parent_id || (fetchleaf && data.details)) && (
         <Handle
           type="target"
           position={layout == Layout.HORIZONTAL ? Position.Left : Position.Top}
           style={{}}
         />
       )}
-      {data.details && (
+
+      {fetchleaf && (
+        <HtmlTooltip
+          onOpen={handleTooltipOpen}
+          open={tooltipOpen}
+          onClose={handleTooltipClose}
+          title={
+            data?.details
+              ? Object.keys(data?.details).map((key, index) => (
+                  <DataItem
+                    style={{ gridTemplateColumns: "1fr 1fr" }}
+                    key={index}
+                  >
+                    <span style={{ fontWeight: "bold" }}>
+                      {capitalizeFirstLetter(key)}
+                    </span>
+                    <span
+                      style={{
+                        maxWidth: "150px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        textAlign: "right",
+                      }}
+                    >
+                      {data?.details[key]}
+                    </span>
+                  </DataItem>
+                ))
+              : ""
+          }
+        >
+          {" "}
+          <DataContainer
+            style={{
+              backgroundColor: `${
+                data?.is_leaf ? leafColor : entities[data?.name]
+              }`,
+            }}
+          >
+            {!expand ? (
+              <DataItem style={{ textAlign: "center" }}>
+                <span style={{ color: "#5928E5" }}>{data?.name}</span>
+                <br />
+                <span style={{ color: "#E91E63" }}>
+                  {data?.node_id?.split("-").slice(1)}
+                </span>
+                <br />
+                <div style={{ position: "absolute", right: 0, top: 0 }}>
+                  <IconButton onClick={(e) => expandHandler(e)}>
+                    {expand ? (
+                      <CloseOutlinedIcon />
+                    ) : (
+                      <ArrowDropDownOutlinedIcon />
+                    )}
+                  </IconButton>
+                </div>
+              </DataItem>
+            ) : (
+              <>
+                <DataItem style={{ gridTemplateColumns: "1fr 0.5fr" }}>
+                  <span style={{ fontWeight: "bold", color: "#5928E5" }}>
+                    Entity{" "}
+                  </span>
+                  <span
+                    style={{
+                      minWidth: "150px",
+                      maxWidth: "250px",
+
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      textAlign: "right",
+                      color: "#E91E63",
+                    }}
+                  >
+                    {data?.name}
+                  </span>
+                </DataItem>{" "}
+                <DataItem style={{ gridTemplateColumns: "1fr 0.5fr" }}>
+                  <span style={{ fontWeight: "bold", color: "#5928E5" }}>
+                    ID{" "}
+                  </span>
+                  <span
+                    style={{
+                      minWidth: "150px",
+                      maxWidth: "250px",
+
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      textAlign: "right",
+                      color: "#E91E63",
+                    }}
+                  >
+                    {data?.node_id.split("-").slice(1)}
+                  </span>
+                </DataItem>{" "}
+                {data.details &&
+                  Object.keys(data?.details).map((key) => {
+                    return (
+                      <DataItem
+                        style={{
+                          gridTemplateColumns: "1fr 0.5fr",
+                        }}
+                        key={data?.details?.identifier}
+                      >
+                        <span style={{ fontWeight: "bold", color: "#5928E5" }}>
+                          {capitalizeFirstLetter(key)}
+                        </span>
+                        <InnerTooltip
+                          sx={{ background: "white" }}
+                          title={data?.details[key]}
+                        >
+                          <span
+                            style={{
+                              minWidth: "150px",
+                              maxWidth: "250px",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              textAlign: "right",
+                              color: "#E91E63",
+                            }}
+                          >
+                            {data?.details[key]}
+                          </span>
+                        </InnerTooltip>
+                      </DataItem>
+                    );
+                  })}
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 0,
+                    top: 0,
+                  }}
+                >
+                  <IconButton onClick={(e) => expandHandler(e)}>
+                    {expand ? (
+                      <CloseOutlinedIcon />
+                    ) : (
+                      <ArrowDropDownOutlinedIcon />
+                    )}
+                  </IconButton>
+                </div>
+              </>
+            )}
+          </DataContainer>
+        </HtmlTooltip>
+      )}
+
+      {!fetchleaf && data.details && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
           open={tooltipOpen}
@@ -219,14 +378,17 @@ export const Node = ({ data, layout }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-      <Handle
-        type="source"
-        position={
-          layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
-        }
-        id="a"
-        style={{}}
-      />
+      {!fetchleaf ||
+        (!data.details && (
+          <Handle
+            type="source"
+            position={
+              layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
+            }
+            id="a"
+            style={{}}
+          />
+        ))}
     </>
   );
 };

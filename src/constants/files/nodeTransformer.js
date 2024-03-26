@@ -74,14 +74,17 @@ export const convertJsonToNodesAndEdges = (
   if (showLeaf == true) {
     nodes = [];
     edges = [];
-    const encounteredIds = new Set(); // Set to keep track of encountered node IDs
+    const encounteredIds = new Set();
 
     let currentNode = {
       id: `${oldGraphData.entity}-${oldGraphData.id}`,
       data: {
         label: `${oldGraphData.entity}-${oldGraphData.id}`,
         isSelected: false,
+        name: `${oldGraphData.entity}`,
+        node_id: `${oldGraphData.entity}-${oldGraphData.id}`,
       },
+
       position: { x: 0, y: 0 },
       depth: 0,
       type: oldGraphData.entity || "PurchaseOrder",
@@ -106,7 +109,7 @@ export const convertJsonToNodesAndEdges = (
           type: entity || "PurchaseOrder",
         };
         nodes.push(currentNode);
-        encounteredIds.add(node.node_id); // Add the encountered ID to the set
+        encounteredIds.add(node.node_id);
 
         const edgeId = `e${`${oldGraphData.entity}-${oldGraphData.id}`}-${
           node.node_id
