@@ -279,7 +279,7 @@ function HomeInput() {
                       color: "#00A300 !important",
                     },
                   }}
-                  label="Full Graph"
+                  label="Full Trace"
                   {...a11yProps(0)}
                   value={0}
                 />
@@ -293,7 +293,7 @@ function HomeInput() {
                       color: "#00A300 !important",
                     },
                   }}
-                  label="Leaf Node"
+                  label="End Points"
                   {...a11yProps(1)}
                   value={1}
                 />
@@ -307,7 +307,7 @@ function HomeInput() {
                       color: "#00A300 !important",
                     },
                   }}
-                  label="CSV"
+                  label="Bulk Report"
                   {...a11yProps(2)}
                   value={2}
                 />
