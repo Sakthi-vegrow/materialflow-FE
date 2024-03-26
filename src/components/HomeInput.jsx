@@ -31,7 +31,6 @@ import axios from "axios";
 import { URL } from "../../env";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import DocumentScannerOutlinedIcon from "@mui/icons-material/DocumentScannerOutlined";
-import { convertJsonToNodesAndEdges } from "../constants/files/nodeTransformer";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -640,6 +639,7 @@ const CenteredContainer = styled(Container)({
   justifyContent: "center",
   alignItems: "center",
   // paddingTop: "20vh",
+  padding: "0px 0px 40px 0px",
 });
 
 const TitleText = styled(Typography)({
