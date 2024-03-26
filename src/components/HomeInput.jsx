@@ -369,7 +369,7 @@ function HomeInput() {
                   <FormControlLabel
                     control={
                       <>
-                        SO
+                        PO
                         <ArrowRightAltIcon
                           style={{
                             background: "#00A300",
@@ -387,7 +387,7 @@ function HomeInput() {
                           }}
                           onClick={handleFormCheckInput}
                         />
-                        PO
+                        SO
                       </>
                     }
                     value={formData.reverse}
@@ -457,7 +457,7 @@ function HomeInput() {
                   <FormControlLabel
                     control={
                       <>
-                        SO
+                        PO
                         <ArrowRightAltIcon
                           style={{
                             background: "#00A300",
@@ -475,7 +475,7 @@ function HomeInput() {
                           }}
                           onClick={handleFormCheckInput}
                         />
-                        PO
+                        SO
                       </>
                     }
                     value={formData.reverse}
@@ -571,14 +571,15 @@ function HomeInput() {
                       },
                     }}
                     onChange={handleFileChange}
+                    disabled={selectedFile ? true : false}
                   >
-                    Upload file
+                    {selectedFile ? "File Uploaded" : "Upload file"}
                     <VisuallyHiddenInput type="file" accept=".csv" />
                   </Button>
                   <FormControlLabel
                     control={
                       <>
-                        SO
+                        PO
                         <ArrowRightAltIcon
                           style={{
                             background: "#00A300",
@@ -596,7 +597,7 @@ function HomeInput() {
                           }}
                           onClick={handleFormCheckInput}
                         />
-                        PO
+                        SO
                       </>
                     }
                     value={formData.reverse}

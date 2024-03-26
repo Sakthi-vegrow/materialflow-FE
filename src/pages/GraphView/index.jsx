@@ -10,6 +10,7 @@ import { useParams } from "react-router";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { ENTITIES } from "../../constants";
 import NodesBreadcrumbs from "../../components/DagreAutoLayout/helpers/NodesBreadCrumb";
+import { layerCount } from "../../constants/files/entities";
 
 export const GraphView = () => {
   const { id, entity } = useParams();
@@ -61,7 +62,7 @@ export const GraphView = () => {
       axios
         .get(
           URL +
-            `material_flow/graph_traverse?entity=${entity}&entity_id=${id}&layers=5&reverse=${rev.get(
+            `material_flow/graph_traverse?entity=${entity}&entity_id=${id}&layers=${layerCount}&reverse=${rev.get(
               "reverse"
             )}`,
           {

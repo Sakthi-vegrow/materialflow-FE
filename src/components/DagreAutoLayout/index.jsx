@@ -279,6 +279,12 @@ const LayoutFlow = ({
                   onChange={() => {
                     setShowFullGraph((val) => !val);
                   }}
+                  sx={{
+                    "& .MuiSwitch-thumb": { backgroundColor: "#8b3dff" }, // Handle color
+                    "& .MuiSwitch-track": {
+                      backgroundColor: "#8b3dff !important",
+                    },
+                  }}
                 />
                 <span style={{ fontSize: 10 }}>Full Graph</span>
               </div>

@@ -18,4 +18,6 @@ export const edgeColors = {
   Regrading: "#D63484 ",
 };
 
+export const layerCount = 10
+
 export const leafColor = "#A1EEBD";
