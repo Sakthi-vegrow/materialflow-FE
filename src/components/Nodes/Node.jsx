@@ -11,8 +11,6 @@ import { Layout } from "../DagreAutoLayout";
 import { capitalizeFirstLetter } from "../DagreAutoLayout/helpers/capitalizeFirstLetter";
 import { useSearchParams } from "react-router-dom";
 
-const handleStyle = { left: 10 };
-
 const DataContainer = styled("div")({
   padding: 20,
   paddingTop: 30,
@@ -76,14 +74,13 @@ export const Node = ({ data, layout }) => {
 
   return (
     <>
-      {(data.parent_id || (fetchleaf && data.details)) && (
+      {((fetchleaf && data.details) || (!fetchleaf && data.parent_id)) && (
         <Handle
           type="target"
           position={layout == Layout.HORIZONTAL ? Position.Left : Position.Top}
           style={{}}
         />
       )}
-
       {fetchleaf && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
@@ -234,7 +231,6 @@ export const Node = ({ data, layout }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-
       {!fetchleaf && data.details && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
@@ -378,17 +374,16 @@ export const Node = ({ data, layout }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-      {!fetchleaf ||
-        (!data.details && (
-          <Handle
-            type="source"
-            position={
-              layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
-            }
-            id="a"
-            style={{}}
-          />
-        ))}
+      {((fetchleaf && !data.details) || !fetchleaf) && (
+        <Handle
+          type="source"
+          position={
+            layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
+          }
+          id="a"
+          style={{}}
+        />
+      )}
     </>
   );
 };
