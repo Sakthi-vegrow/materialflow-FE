@@ -223,7 +223,15 @@ const LayoutFlow = ({
                   gap: 0.7,
                   position: "fixed",
                   left: `${layout != Layout.VERTICAL ? "20px" : "10px"}`,
-                  top: `${layout != Layout.VERTICAL ? "105px" : "115px"}`,
+                  top: `${
+                    fetchleaf
+                      ? layout != Layout.VERTICAL
+                        ? "60px"
+                        : "75px"
+                      : layout != Layout.VERTICAL
+                      ? "105px"
+                      : "115px"
+                  }`,
                   fontSize: 10,
                   fontWeight: "bold",
                   transition: "all 0.1s ease-in-out",
