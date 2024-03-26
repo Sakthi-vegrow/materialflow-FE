@@ -66,6 +66,7 @@ const LayoutFlow = ({
       PurchaseItem: (props) => <Node {...props} layout={layout} />,
       Shipment: (props) => <Node {...props} layout={layout} />,
       Lot: (props) => <Node {...props} layout={layout} />,
+      SaleOrder: (props) => <Node {...props} layout={layout} />,
       SaleOrderItem: (props) => <Node {...props} layout={layout} />,
       Regrading: (props) => <Node {...props} layout={layout} />,
     }),

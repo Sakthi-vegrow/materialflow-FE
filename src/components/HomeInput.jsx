@@ -103,7 +103,7 @@ function HomeInput() {
   };
 
   const handleFormCheckInput = (e) => {
-    setFormData({ ...formData, reverse: e.target.checked });
+    setFormData({ ...formData, reverse: !formData.reverse });
   };
 
   const handleSubmit = () => {
@@ -368,18 +368,30 @@ function HomeInput() {
                   </FormControlStyled>
                   <FormControlLabel
                     control={
-                      <Switch
-                        sx={{
-                          "& .MuiSwitch-thumb": { backgroundColor: "#00A300" },
-                          "& .MuiSwitch-track": {
-                            backgroundColor: "#00A300 !important",
-                          },
-                        }}
-                      />
+                      <>
+                        SO
+                        <ArrowRightAltIcon
+                          style={{
+                            background: "#00A300",
+                            color: "white",
+                            borderRadius: "50%",
+                            padding: 2,
+                            marginLeft: 10,
+                            marginRight: 10,
+                            transform: `${
+                              formData.reverse
+                                ? "rotate(-180deg)"
+                                : "rotate(0deg)"
+                            }`,
+                            transition: "all 0.2s ease-in",
+                          }}
+                          onClick={handleFormCheckInput}
+                        />
+                        PO
+                      </>
                     }
-                    label="Reverse"
                     value={formData.reverse}
-                    onChange={handleFormCheckInput}
+                    onClick={handleFormCheckInput}
                     sx={{ display: "flex", justifyContent: "center" }}
                   />
 
@@ -444,16 +456,28 @@ function HomeInput() {
                   </FormControlStyled>
                   <FormControlLabel
                     control={
-                      <Switch
-                        sx={{
-                          "& .MuiSwitch-thumb": { backgroundColor: "#00A300" },
-                          "& .MuiSwitch-track": {
-                            backgroundColor: "#00A300 !important",
-                          },
-                        }}
-                      />
+                      <>
+                        SO
+                        <ArrowRightAltIcon
+                          style={{
+                            background: "#00A300",
+                            color: "white",
+                            borderRadius: "50%",
+                            padding: 2,
+                            marginLeft: 10,
+                            marginRight: 10,
+                            transform: `${
+                              formData.reverse
+                                ? "rotate(-180deg)"
+                                : "rotate(0deg)"
+                            }`,
+                            transition: "all 0.2s ease-in",
+                          }}
+                          onClick={handleFormCheckInput}
+                        />
+                        PO
+                      </>
                     }
-                    label="Reverse"
                     value={formData.reverse}
                     onChange={handleFormCheckInput}
                     sx={{ display: "flex", justifyContent: "center" }}
@@ -553,18 +577,30 @@ function HomeInput() {
                   </Button>
                   <FormControlLabel
                     control={
-                      <Switch
-                        sx={{
-                          "& .MuiSwitch-thumb": { backgroundColor: "#00A300" },
-                          "& .MuiSwitch-track": {
-                            backgroundColor: "#00A300 !important",
-                          },
-                        }}
-                      />
+                      <>
+                        SO
+                        <ArrowRightAltIcon
+                          style={{
+                            background: "#00A300",
+                            color: "white",
+                            borderRadius: "50%",
+                            padding: 2,
+                            marginLeft: 10,
+                            marginRight: 10,
+                            transform: `${
+                              formData.reverse
+                                ? "rotate(-180deg)"
+                                : "rotate(0deg)"
+                            }`,
+                            transition: "all 0.2s ease-in",
+                          }}
+                          onClick={handleFormCheckInput}
+                        />
+                        PO
+                      </>
                     }
-                    label={formData.reverse ? "PO → SO" : "SO → PO"}
                     value={formData.reverse}
-                    onChange={handleFormCheckInput}
+                    onClick={handleFormCheckInput}
                     sx={{ display: "flex", justifyContent: "center" }}
                   />
                   <FormSubmitBtn variant="contained" onClick={handleSubmit}>
