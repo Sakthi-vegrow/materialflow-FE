@@ -130,13 +130,14 @@ export const GraphView = () => {
     <ReactFlowProvider>
       <div className="">
         <ButtonAppBar />
-
-        <NodesBreadcrumbs
-          activeNodes={selectedNodes}
-          fetchGraph={fetchGraphData}
-          activate={!showFullGraph}
-          updateHistory={updateHistoryNodes}
-        />
+        {!fetchleaf && (
+          <NodesBreadcrumbs
+            activeNodes={selectedNodes}
+            fetchGraph={fetchGraphData}
+            activate={!showFullGraph}
+            updateHistory={updateHistoryNodes}
+          />
+        )}
 
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}

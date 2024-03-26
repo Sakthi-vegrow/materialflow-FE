@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 import { Node } from "../Nodes/Node";
 import Edge from "../Edges/Edge";
+import { useSearchParams } from "react-router-dom";
 
 const label = { inputProps: { "aria-label": "Clear Old Nodes" } };
 
@@ -55,6 +56,9 @@ const LayoutFlow = ({
 
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesData);
   const [edges, setEdges, onEdgesChange] = useEdgesState(edgesData);
+  const [fetchleaf, setFetchleaf] = useState(false);
+
+  const [rev] = useSearchParams();
 
   const nodeTypes = useMemo(
     () => ({
@@ -168,6 +172,10 @@ const LayoutFlow = ({
     [nodes, edges]
   );
 
+  useEffect(() => {
+    setFetchleaf(rev.get("fetchleaf"));
+  }, []);
+
   return (
     <div style={{ height: "90vh", width: "100vw", overflow: "scroll" }}>
       <ReactFlow
@@ -252,19 +260,20 @@ const LayoutFlow = ({
                 )}
               </Button>
             </Grid>
-            <div style={{ position: "fixed", right: 10, top: 75 }}>
-              <Switch
-                {...label}
-                name="Show Full Graph"
-                checked={showFullGraph}
-                size="small"
-                onChange={() => {
-                  setShowFullGraph((val) => !val);
-                }}
-              />
-              <span style={{ fontSize: 10 }}>Full Graph</span>
-            </div>
-
+            {!fetchleaf && (
+              <div style={{ position: "fixed", right: 10, top: 75 }}>
+                <Switch
+                  {...label}
+                  name="Show Full Graph"
+                  checked={showFullGraph}
+                  size="small"
+                  onChange={() => {
+                    setShowFullGraph((val) => !val);
+                  }}
+                />
+                <span style={{ fontSize: 10 }}>Full Graph</span>
+              </div>
+            )}
             {/* <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
