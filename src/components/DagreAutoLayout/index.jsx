@@ -272,6 +272,8 @@ const LayoutFlow = ({
             </Grid>
             {!fetchleaf && (
               <div style={{ position: "fixed", right: 10, top: 75 }}>
+                <span style={{ fontSize: 12 }}>Partial</span>
+
                 <Switch
                   {...label}
                   name="Show Full Graph"
@@ -287,7 +289,7 @@ const LayoutFlow = ({
                     },
                   }}
                 />
-                <span style={{ fontSize: 10 }}>Full Graph</span>
+                <span style={{ fontSize: 12 }}>Full</span>
               </div>
             )}
             {/* <Select
