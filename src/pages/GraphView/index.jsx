@@ -34,7 +34,7 @@ export const GraphView = () => {
       id,
       entity,
     });
-    // setSelectedNodes([{ entity, id }]);
+    setSelectedNodes([{ entity, id: `${entity}-${id}` }]);
   }, [id, entity]);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export const GraphView = () => {
         )
         .then(({ data }) => {
           setGraphData(
-            convertJsonToNodesAndEdges(data, graphData, false, true)
+            convertJsonToNodesAndEdges(data, graphData, false, showFullGraph)
           );
           setLoading(false);
         })
