@@ -236,10 +236,10 @@ const LayoutFlow = ({
                   fontSize: 10,
                   fontWeight: "bold",
                   transition: "all 0.15s ease-in-out",
-                  background: "#FF6868",
+                  background: "#4caf50",
                   cursort: "pointer",
                   "&:hover": {
-                    background: "#DD4646",
+                    background: "#2a8d30",
                   },
                 }}
               >
