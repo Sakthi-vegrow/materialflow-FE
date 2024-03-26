@@ -80,6 +80,7 @@ export const Node = ({ data, layout }) => {
         position={layout == Layout.HORIZONTAL ? Position.Left : Position.Top}
         style={{}}
       />
+
       {fetchleaf && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
@@ -373,16 +374,14 @@ export const Node = ({ data, layout }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-      {((fetchleaf && !data.details) || !fetchleaf) && (
-        <Handle
-          type="source"
-          position={
-            layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
-          }
-          id="a"
-          style={{}}
-        />
-      )}
+      <Handle
+        type="source"
+        position={
+          layout == Layout.HORIZONTAL ? Position.Right : Position.Bottom
+        }
+        id="a"
+        style={{}}
+      />
     </>
   );
 };
