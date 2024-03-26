@@ -44,6 +44,8 @@ const LayoutFlow = ({
   viewPort,
   showFullGraph,
   setShowFullGraph,
+  fitMyView,
+  setFitMyView,
 }) => {
   const { fitView } = useReactFlow();
 
@@ -129,9 +131,8 @@ const LayoutFlow = ({
   }, [initialNodes, initialEdges, layout]);
 
   useEffect(() => {
-    if (!showFullGraph) fitView();
-    return () => {};
-  }, [nodes]);
+    console.log("FROM LAYOUT: ", initialNodes, initialEdges);
+  }, [initialNodes]);
 
   useEffect(() => {
     // if(showFullGraph)

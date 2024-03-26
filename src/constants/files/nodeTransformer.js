@@ -65,7 +65,8 @@ export const transformToNodesAndEdges = (data) => {
 export const convertJsonToNodesAndEdges = (
   jsonData,
   oldGraphData,
-  showLeaf = false
+  showLeaf = false,
+  showFullGraph = true
 ) => {
   var nodes = [];
   var edges = [];
@@ -73,50 +74,61 @@ export const convertJsonToNodesAndEdges = (
   if (showLeaf == true) {
     nodes = [];
     edges = [];
+    const encounteredIds = new Set(); // Set to keep track of encountered node IDs
 
     let currentNode = {
-      id: oldGraphData.node_id,
+      id: `${oldGraphData.entity}-${oldGraphData.id}`,
       data: {
-        label: oldGraphData.node_id,
-        ...oldGraphData,
+        label: `${oldGraphData.entity}-${oldGraphData.id}`,
         isSelected: false,
       },
       position: { x: 0, y: 0 },
       depth: 0,
-      type: entity || "PurchaseOrder",
+      type: oldGraphData.entity || "PurchaseOrder",
     };
 
     nodes.push(currentNode);
 
-    jsonData.map((node) => {
-      let currentNode = {
-        id: node.node_id,
-        data: {
-          label: node.node_id,
-          ...node,
-          isSelected: false,
-        },
-        position: { x: 0, y: 0 },
-        depth: 0,
-        type: entity || "PurchaseOrder",
-      };
+    Object.keys(jsonData).forEach((key) => {
+      const node = jsonData[key];
+      let [entity, levelId] = node.node_id.split("-");
+      if (!encounteredIds.has(node.node_id)) {
+        // Check if node ID has been encountered before
+        let currentNode = {
+          id: node.node_id,
+          data: {
+            label: node.node_id,
+            ...node,
+            isSelected: false,
+          },
+          position: { x: 0, y: 0 },
+          depth: 1,
+          type: entity || "PurchaseOrder",
+        };
+        nodes.push(currentNode);
+        encounteredIds.add(node.node_id); // Add the encountered ID to the set
 
-      const edgeId = `e${oldGraphData.node_id}-${node.node_id}`;
-      edges.push({
-        id: edgeId,
-        source: oldGraphData.node_id,
-        target: node.node_id,
-        // Assuming edge colors and marker type are predefined
-        style: { stroke: "#000" }, // You can customize edge style here
-        markerEnd: { type: "arrow" }, // You can customize marker type here
-      });
+        const edgeId = `e${`${oldGraphData.entity}-${oldGraphData.id}`}-${
+          node.node_id
+        }`;
 
-      nodes.push(currentNode);
+        edges.push({
+          id: edgeId,
+          source: `${oldGraphData.entity}-${oldGraphData.id}`,
+          target: node.node_id,
+          // Assuming edge colors and marker type are predefined
+          style: { stroke: "#000" }, // You can customize edge style here
+          markerEnd: { type: "arrow" }, // You can customize marker type here
+        });
+      }
     });
   } else {
     nodes = oldGraphData.nodes || [];
     edges = oldGraphData.edges || [];
-
+    if (showFullGraph == false) {
+      nodes = [];
+      edges = [];
+    }
     const existingNodeIds = new Set(nodes.map((node) => node.id));
     const existingEdgeIds = new Set(edges.map((edge) => edge.id));
 

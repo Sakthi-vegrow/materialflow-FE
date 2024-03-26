@@ -7,7 +7,7 @@ import { ReactFlowProvider, useReactFlow } from "reactflow";
 import { Backdrop, CircularProgress } from "@mui/material";
 import ButtonAppBar from "../ButtonAppBar";
 import { useParams } from "react-router";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { ENTITIES } from "../../constants";
 import NodesBreadcrumbs from "../../components/DagreAutoLayout/helpers/NodesBreadCrumb";
 
@@ -35,11 +35,23 @@ export const GraphView = () => {
     return () => {};
   }, []);
 
-  const fetchGraphData = (entity, id) =>
-    // entity = "PurchaseOrder",
-    // levelId = 19524,
-    {
-      setLoading(true);
+  const fetchleaf = rev.get("fetchleaf");
+
+  const fetchGraphData = (entity, id) => {
+    setLoading(true);
+    if (fetchleaf) {
+      axios
+        .post(URL + `material_flow/get_endpoints.json`, {
+          headers: { "ngrok-skip-browser-warning": true },
+          csv_data: [{ entity: entity, id: id }],
+          reverse: rev.get("reverse") === "true",
+        })
+        .then(({ data }) => {
+          setGraphData(convertJsonToNodesAndEdges(data, { entity, id }, true));
+          setLoading(false);
+        })
+        .catch(console.log);
+    } else {
       axios
         .get(
           URL +
@@ -51,16 +63,18 @@ export const GraphView = () => {
           }
         )
         .then(({ data }) => {
-          setGraphData(convertJsonToNodesAndEdges(data, graphData, false));
+          setGraphData(
+            convertJsonToNodesAndEdges(data, graphData, false, showFullGraph)
+          );
           setLoading(false);
         })
         .catch(console.log);
-    };
+    }
+  };
 
   const handleNodeClick = (e, node) => {
-    console.log("clicked leaf node: ", node);
-    if (node.is_leaf) {
-      alert("Its a leaf");
+    if (node.data?.is_leaf || fetchleaf) {
+      e.preventDefault();
       return;
     }
 
@@ -100,7 +114,12 @@ export const GraphView = () => {
   }, [selectedNodes]);
 
   useEffect(() => {
-    console.log("Updated GraphData: ", graphData, "LEVEL: ", level);
+    console.log(
+      "Updated GraphData=> \nnodes:  ",
+      graphData.nodes,
+      " edges: ",
+      graphData.edges
+    );
   }, [graphData]);
 
   return (

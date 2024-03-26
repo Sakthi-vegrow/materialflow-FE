@@ -30,6 +30,8 @@ import { validateEmail } from "./DagreAutoLayout/helpers/emailValidator";
 import axios from "axios";
 import { URL } from "../../env";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import DocumentScannerOutlinedIcon from "@mui/icons-material/DocumentScannerOutlined";
+import { convertJsonToNodesAndEdges } from "../constants/files/nodeTransformer";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -80,11 +82,17 @@ function HomeInput() {
     setTabValue(0);
   }, []);
 
-  const [formData, setFormData] = useState({
+  const defaultFormData = {
     entity: "",
     id: "",
     reverse: false,
-  });
+  };
+
+  const [formData, setFormData] = useState(defaultFormData);
+
+  useEffect(() => {
+    setFormData(defaultFormData);
+  }, [tabValue]);
 
   const handleFormEntityInput = (e) => {
     setFormData({ ...formData, entity: e.target.value });
@@ -111,18 +119,9 @@ function HomeInput() {
       if (formData.entity == "" || formData.id == "") {
         setEmptyAlert(true);
       } else {
-        axios
-          .post(URL + `material_flow/get_endpoints.json`, {
-            headers: { "ngrok-skip-browser-warning": true },
-            csv_data: JSON.stringify(formData),
-          })
-          .then(({ data }) => {
-            console.log("data from api: ", data);
-            // setGraphData(
-            //   convertJsonToNodesAndEdges(data, formData, true) // true for showleaf value
-            // );
-          })
-          .catch(console.log);
+        navigate(
+          `/graph/${formData.entity}/${formData.id}?reverse=${formData.reverse}&fetchleaf=true`
+        );
       }
     } else if (tabValue == 2) {
       if (email == "" || !validateEmail(email) || selectedFile == null) {
@@ -132,6 +131,7 @@ function HomeInput() {
           .post(URL + `material_flow/get_endpoints.json`, {
             headers: { "ngrok-skip-browser-warning": true },
             csv_data: jsonData,
+            reverse: formData.reverse,
             email: email,
           })
           .then((data) => {
@@ -568,7 +568,8 @@ function HomeInput() {
                     sx={{ display: "flex", justifyContent: "center" }}
                   />
                   <FormSubmitBtn variant="contained" onClick={handleSubmit}>
-                    <AlignVerticalCenterIcon /> Visualize
+                    <DocumentScannerOutlinedIcon sx={{ marginRight: 1 }} /> Get
+                    Report
                   </FormSubmitBtn>
                 </FormCardContent>
               </CustomTabPanel>
