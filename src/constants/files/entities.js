@@ -3,7 +3,7 @@ export const entities = {
   PurchaseItem: "#FFE4C9",
   Shipment: "#DCF2F1",
   Lot: "#D2DAFF",
-  SaleOrder: "#45AB12",
+  SaleOrder: "#FFEEF4",
   SaleOrderItem: "#CDFADB",
   Regrading: "#F1EAFF ",
 };
@@ -13,7 +13,7 @@ export const edgeColors = {
   PurchaseItem: "#EE7214",
   Shipment: "#29ADB2",
   Lot: "#937DC2",
-  SaleOrder: "#45AB12",
+  SaleOrder: "#D864A9",
   SaleOrderItem: "#0A1D56",
   Regrading: "#D0A2F7 ",
 };
