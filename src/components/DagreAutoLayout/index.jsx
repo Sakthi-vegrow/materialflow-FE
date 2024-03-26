@@ -235,10 +235,10 @@ const LayoutFlow = ({
                   }`,
                   fontSize: 10,
                   fontWeight: "bold",
-                  transition: "all 0.1s ease-in-out",
-                  background: "#8b3dff",
+                  transition: "all 0.15s ease-in-out",
+                  background: "#4caf50",
                   "&:hover": {
-                    background: "#6b2bcc",
+                    background: "#45a048",
                   },
                 }}
               >
@@ -280,9 +280,9 @@ const LayoutFlow = ({
                     setShowFullGraph((val) => !val);
                   }}
                   sx={{
-                    "& .MuiSwitch-thumb": { backgroundColor: "#8b3dff" }, // Handle color
+                    "& .MuiSwitch-thumb": { backgroundColor: "#4caf50" }, // Handle color
                     "& .MuiSwitch-track": {
-                      backgroundColor: "#8b3dff !important",
+                      backgroundColor: "#4caf50 !important",
                     },
                   }}
                 />
