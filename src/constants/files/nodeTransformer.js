@@ -120,8 +120,16 @@ export const convertJsonToNodesAndEdges = (
           source: `${oldGraphData.entity}-${oldGraphData.id}`,
           target: node.node_id,
           // Assuming edge colors and marker type are predefined
-          style: { stroke: "#000" }, // You can customize edge style here
-          markerEnd: { type: "arrow" }, // You can customize marker type here
+          style: {
+            stroke: edgeColors[oldGraphData.entity],
+            strokeWidth: "1.5px",
+          }, // You can customize edge style here
+          markerEnd: {
+            type: "arrow",
+            width: 20,
+            height: 20,
+            color: edgeColors[oldGraphData.entity],
+          }, // You can customize marker type here
         });
       }
     });
@@ -159,14 +167,22 @@ export const convertJsonToNodesAndEdges = (
       if (node.parent_id && node.parent_id.length > 0) {
         node.parent_id.forEach((parentId) => {
           const edgeId = `e${parentId}-${node.node_id}`;
+          console.log(parentId.split("-")[0]);
           if (!existingEdgeIds.has(edgeId)) {
             edges.push({
               id: edgeId,
               source: parentId,
               target: node.node_id,
-              // Assuming edge colors and marker type are predefined
-              style: { stroke: "#000" }, // You can customize edge style here
-              markerEnd: { type: "arrow" }, // You can customize marker type here
+              style: {
+                stroke: edgeColors[parentId.split("-")[0]],
+                strokeWidth: "1.5px",
+              },
+              markerEnd: {
+                type: "arrow",
+                width: 20,
+                height: 20,
+                color: edgeColors[parentId.split("-")[0]],
+              }, // You can customize marker type here
             });
             existingEdgeIds.add(edgeId);
           }
