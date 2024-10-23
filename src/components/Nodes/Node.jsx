@@ -70,7 +70,7 @@ export const Node = ({ data, layout }) => {
 
   useEffect(() => {
     setFetchleaf(rev.get("fetchleaf"));
-    console.log("NODE PARAM: ", rev.get("fetchleaf"));
+    // console.log("NODE PARAM: ", rev.get("fetchleaf"));
   }, []);
 
   return (

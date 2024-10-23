@@ -27,7 +27,7 @@ export const transformToNodesAndEdges = (data) => {
     };
 
     if (parentId) {
-      console.log("Node: ", node);
+      // console.log("Node: ", node);
       edges.push({
         id: `e${parentId}-${node.node_id}`,
         source: parentId,
@@ -167,7 +167,7 @@ export const convertJsonToNodesAndEdges = (
       if (node.parent_id && node.parent_id.length > 0) {
         node.parent_id.forEach((parentId) => {
           const edgeId = `e${parentId}-${node.node_id}`;
-          console.log(parentId.split("-")[0]);
+          // console.log(parentId.split("-")[0]);
           if (!existingEdgeIds.has(edgeId)) {
             edges.push({
               id: edgeId,

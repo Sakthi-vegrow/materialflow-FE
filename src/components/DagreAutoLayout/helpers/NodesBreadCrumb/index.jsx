@@ -52,7 +52,7 @@ const NodesBreadcrumbs = ({
   updateHistory,
 }) => {
   const handleClick = (event, node) => {
-    console.log("Event: ", node);
+    // console.log("Event: ", node);
     event.preventDefault();
     let [entity, id] = node.id.split("-");
     updateHistory(node);
@@ -68,7 +68,7 @@ const NodesBreadcrumbs = ({
   // };
 
   useEffect(() => {
-    console.log("Nodes for bread: ", activeNodes);
+    // console.log("Nodes for bread: ", activeNodes);
   }, [activeNodes]);
 
   return (
