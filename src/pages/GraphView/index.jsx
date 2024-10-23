@@ -51,11 +51,16 @@ export const GraphView = () => {
     setLoading(true);
     // console.log("FETCHLEAF from API: ", fetchleaf);
     if (fetchleaf) {
+      const entities = {
+        entity: entity,
+        id: id,
+        reverse: rev.get("reverse") === "true",
+        end_nodes_only: true,
+      };
       axios
-        .post(URL + `material_flow/get_endpoints.json`, {
+        .post(URL + `material_flow/traverse`, {
           headers: { "ngrok-skip-browser-warning": true },
-          csv_data: [{ entity: entity, id: id }],
-          reverse: rev.get("reverse") === "true",
+          entities: [entities],
         })
         .then(({ data }) => {
           setGraphData(convertJsonToNodesAndEdges(data, { entity, id }, true));
@@ -71,16 +76,10 @@ export const GraphView = () => {
         reverse: rev.get("reverse") === "true",
       };
       axios
-        .post(
-          URL +
-            `material_flow/traverse?layers=${layerCount}&reverse=${rev.get(
-              "reverse"
-            )}`,
-          {
-            headers: { "ngrok-skip-browser-warning": true },
-            entities: [entities],
-          }
-        )
+        .post(URL + `material_flow/traverse`, {
+          headers: { "ngrok-skip-browser-warning": true },
+          entities: [entities],
+        })
         .then(({ data }) => {
           setGraphData(
             convertJsonToNodesAndEdges(data, graphData, false, showFullGraph)
