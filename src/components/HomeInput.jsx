@@ -177,8 +177,8 @@ function HomeInput() {
   const convertCsvtoJson = (csvContent) => {
     const lines = csvContent.split(/\r?\n/); // Handle both \n and \r\n line endings
     const headers = lines[0].split(",");
-    console.log("LINES: ", lines);
-    console.log("HEADERS: ", headers);
+    // console.log("LINES: ", lines);
+    // console.log("HEADERS: ", headers);
     const data = lines.slice(1).map((line) => {
       const values = line.split(",");
       return headers.reduce((obj, header, index) => {
@@ -198,7 +198,7 @@ function HomeInput() {
       reader.onload = (event) => {
         const content = event.target.result;
         const jsonOutput = convertCsvtoJson(content);
-        console.log("JSON OUTPUT: ", jsonOutput);
+        // console.log("JSON OUTPUT: ", jsonOutput);
         setJsonData(jsonOutput);
       };
       reader.readAsText(file);

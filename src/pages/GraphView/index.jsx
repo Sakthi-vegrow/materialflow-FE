@@ -38,7 +38,7 @@ export const GraphView = () => {
   }, [id, entity]);
 
   useEffect(() => {
-    console.log("params: ", rev.get("fetchleaf"));
+    // console.log("params: ", rev.get("fetchleaf"));
     setFetchleaf(rev.get("fetchleaf") == "true");
     return () => {};
   }, []);
@@ -49,7 +49,7 @@ export const GraphView = () => {
 
   const fetchGraphData = (entity, id) => {
     setLoading(true);
-    console.log("FETCHLEAF from API: ", fetchleaf);
+    // console.log("FETCHLEAF from API: ", fetchleaf);
     if (fetchleaf) {
       axios
         .post(URL + `material_flow/get_endpoints.json`, {
@@ -65,14 +65,18 @@ export const GraphView = () => {
           setSnackOpen(true);
         });
     } else {
-      axios
-        .get(
+      const entities = {
+        "entity": entity,
+        "id": id
+      }
+      axios.post(
           URL +
-            `material_flow/graph_traverse?entity=${entity}&entity_id=${id}&layers=${layerCount}&reverse=${rev.get(
+            `material_flow/traverse?layers=${layerCount}&reverse=${rev.get(
               "reverse"
             )}`,
           {
             headers: { "ngrok-skip-browser-warning": true },
+            entities: [entities],
           }
         )
         .then(({ data }) => {
@@ -123,17 +127,17 @@ export const GraphView = () => {
   };
 
   useEffect(() => {
-    console.log("SelectedNodes: ", selectedNodes);
+    // console.log("SelectedNodes: ", selectedNodes);
   }, [selectedNodes]);
 
-  useEffect(() => {
-    console.log(
-      "Updated GraphData=> \nnodes:  ",
-      graphData.nodes,
-      " edges: ",
-      graphData.edges
-    );
-  }, [graphData]);
+  // useEffect(() => {
+  //   console.log(
+  //     "Updated GraphData=> \nnodes:  ",
+  //     graphData.nodes,
+  //     " edges: ",
+  //     graphData.edges
+  //   );
+  // }, [graphData]);
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {

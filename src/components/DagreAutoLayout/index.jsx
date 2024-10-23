@@ -93,7 +93,7 @@ const LayoutFlow = ({
     dagreGraph.setGraph({ rankdir: direction });
 
     nodes.forEach((node) => {
-      dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+       dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight })
     });
 
     edges.forEach((edge) => {
@@ -124,9 +124,9 @@ const LayoutFlow = ({
       initialEdges,
       layout
     );
-    console.log("Nodes: ", layoutedNodes);
+    // console.log("Nodes: ", layoutedNodes);
     setNodes(layoutedNodes);
-    console.log("Edges: ", layoutedEdges);
+    // console.log("Edges: ", layoutedEdges);
     setEdges(layoutedEdges);
 
     return () => {
@@ -136,7 +136,7 @@ const LayoutFlow = ({
   }, [initialNodes, initialEdges, layout]);
 
   useEffect(() => {
-    console.log("FROM LAYOUT: ", initialNodes, initialEdges);
+    // console.log("FROM LAYOUT: ", initialNodes, initialEdges);
   }, [initialNodes]);
 
   useEffect(() => {
