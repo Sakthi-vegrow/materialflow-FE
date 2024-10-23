@@ -66,10 +66,12 @@ export const GraphView = () => {
         });
     } else {
       const entities = {
-        "entity": entity,
-        "id": id
-      }
-      axios.post(
+        entity: entity,
+        id: id,
+        reverse: rev.get("reverse") === "true",
+      };
+      axios
+        .post(
           URL +
             `material_flow/traverse?layers=${layerCount}&reverse=${rev.get(
               "reverse"

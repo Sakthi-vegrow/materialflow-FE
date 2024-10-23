@@ -87,8 +87,8 @@ export const Node = ({ data, layout }) => {
           open={tooltipOpen}
           onClose={handleTooltipClose}
           title={
-            data?.details
-              ? Object.keys(data?.details).map((key, index) => (
+            data
+              ? Object.keys(data).map((key, index) => (
                   <DataItem
                     style={{ gridTemplateColumns: "1fr 1fr" }}
                     key={index}
@@ -105,7 +105,7 @@ export const Node = ({ data, layout }) => {
                         textAlign: "right",
                       }}
                     >
-                      {data?.details[key]}
+                      {data[key]}
                     </span>
                   </DataItem>
                 ))
@@ -178,21 +178,21 @@ export const Node = ({ data, layout }) => {
                     {data?.node_id.split("-").slice(1)}
                   </span>
                 </DataItem>{" "}
-                {data.details &&
-                  Object.keys(data?.details).map((key) => {
+                {data != null &&
+                  Object.keys(data).map((key) => {
                     return (
                       <DataItem
                         style={{
                           gridTemplateColumns: "1fr 0.5fr",
                         }}
-                        key={data?.details?.identifier}
+                        key={data?.identifier}
                       >
                         <span style={{ fontWeight: "bold", color: "#5928E5" }}>
                           {capitalizeFirstLetter(key)}
                         </span>
                         <InnerTooltip
                           sx={{ background: "white" }}
-                          title={data?.details[key]}
+                          title={data[key]}
                         >
                           <span
                             style={{
@@ -205,7 +205,7 @@ export const Node = ({ data, layout }) => {
                               color: "#E91E63",
                             }}
                           >
-                            {data?.details[key]}
+                            {data[key]}
                           </span>
                         </InnerTooltip>
                       </DataItem>
@@ -231,12 +231,12 @@ export const Node = ({ data, layout }) => {
           </DataContainer>
         </HtmlTooltip>
       )}
-      {!fetchleaf && data.details && (
+      {!fetchleaf && data && (
         <HtmlTooltip
           onOpen={handleTooltipOpen}
           open={tooltipOpen}
           onClose={handleTooltipClose}
-          title={Object.keys(data?.details).map((key, index) => (
+          title={Object.keys(data).map((key, index) => (
             <DataItem style={{ gridTemplateColumns: "1fr 1fr" }} key={index}>
               <span style={{ fontWeight: "bold" }}>
                 {capitalizeFirstLetter(key)}
@@ -250,7 +250,7 @@ export const Node = ({ data, layout }) => {
                   textAlign: "right",
                 }}
               >
-                {data?.details[key]}
+                {data[key]}
               </span>
             </DataItem>
           ))}
@@ -321,21 +321,21 @@ export const Node = ({ data, layout }) => {
                     {data?.node_id.split("-").slice(1)}
                   </span>
                 </DataItem>{" "}
-                {data.details &&
-                  Object.keys(data?.details).map((key) => {
+                {data &&
+                  Object.keys(data).map((key) => {
                     return (
                       <DataItem
                         style={{
                           gridTemplateColumns: "1fr 0.5fr",
                         }}
-                        key={data?.details?.identifier}
+                        key={data?.identifier}
                       >
                         <span style={{ fontWeight: "bold", color: "#5928E5" }}>
                           {capitalizeFirstLetter(key)}
                         </span>
                         <InnerTooltip
                           sx={{ background: "white" }}
-                          title={data?.details[key]}
+                          title={data[key]}
                         >
                           <span
                             style={{
@@ -348,7 +348,7 @@ export const Node = ({ data, layout }) => {
                               color: "#E91E63",
                             }}
                           >
-                            {data?.details[key]}
+                            {data[key]}
                           </span>
                         </InnerTooltip>
                       </DataItem>
